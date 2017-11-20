@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg">
-	<g id="svg_0">
-		<rect id="svg_1" height="50" width="50" y="0" x="0" stroke-width="0" fill="#f25a4f"/>
-		<rect id="svg_2" height="50" width="50" y="0" x="50" stroke-width="0" fill="#946bad"/>
-		<rect id="svg_3" height="50" width="50" y="0" x="100" stroke-width="0" fill="#0096d5"/>
-		<rect id="svg_4" height="50" width="50" y="50" x="0" stroke-width="0" fill="#e98a1c"/>
-		<rect id="svg_5" height="50" width="50" y="50" x="50" stroke-width="0" fill="#9a9e90"/>
-		<rect id="svg_6" height="50" width="50" y="50" x="100" stroke-width="0" fill="#01b5b4"/>
-		<rect id="svg_7" height="50" width="50" y="100" x="0" stroke-width="0" fill="#fdc705"/>
-		<rect id="svg_8" height="50" width="50" y="100" x="50" stroke-width="0" fill="#a3cf56"/>
-		<rect id="svg_9" height="50" width="50" y="100" x="100" stroke-width="0" fill="#6ac17c"/>
-	</g>
+<svg width="75" height="75" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="null" transform="rotate(45 75,75) " id="svg_0">
+        <rect x="23.681372" y="23.681376" stroke="null" fill="#f25a4f" stroke-width="0" width="34.212416" height="34.212416" id="svg_1"/>
+        <rect y="23.681376" stroke="null" fill="#946bad" stroke-width="0" x="57.893789" width="34.212416" height="34.212416" id="svg_2"/>
+        <rect y="23.681376" stroke="null" fill="#0096d5" stroke-width="0" x="92.106205" width="34.212416" height="34.212416" id="svg_3"/>
+        <rect x="23.681372" stroke="null" fill="#e98a1c" stroke-width="0" y="57.893793" width="34.212416" height="34.212416" id="svg_4"/>
+        <rect stroke="null" fill="#9a9e90" stroke-width="0" x="57.893789" y="57.893793" width="34.212416" height="34.212416" id="svg_5"/>
+        <rect stroke="null" fill="#01b5b4" stroke-width="0" x="92.106205" y="57.893793" width="34.212416" height="34.212416" id="svg_6"/>
+        <rect x="23.681372" stroke="null" fill="#fdc705" stroke-width="0" y="92.106209" width="34.212416" height="34.212416" id="svg_7"/>
+        <rect stroke="null" fill="#a3cf56" stroke-width="0" x="57.893789" y="92.106209" width="34.212416" height="34.212416" id="svg_8"/>
+        <rect stroke="null" fill="#6ac17c" stroke-width="0" x="92.106205" y="92.106209" width="34.212416" height="34.212416" id="svg_9"/>
+    </g>
 </svg>
