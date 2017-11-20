@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+	<g id="svg_0">
+		<rect id="svg_1" height="50" width="50" y="0" x="0" stroke-width="0" fill="#f25a4f"/>
+		<rect id="svg_2" height="50" width="50" y="0" x="50" stroke-width="0" fill="#946bad"/>
+		<rect id="svg_3" height="50" width="50" y="0" x="100" stroke-width="0" fill="#0096d5"/>
+		<rect id="svg_4" height="50" width="50" y="50" x="0" stroke-width="0" fill="#e98a1c"/>
+		<rect id="svg_5" height="50" width="50" y="50" x="50" stroke-width="0" fill="#9a9e90"/>
+		<rect id="svg_6" height="50" width="50" y="50" x="100" stroke-width="0" fill="#01b5b4"/>
+		<rect id="svg_7" height="50" width="50" y="100" x="0" stroke-width="0" fill="#fdc705"/>
+		<rect id="svg_8" height="50" width="50" y="100" x="50" stroke-width="0" fill="#a3cf56"/>
+		<rect id="svg_9" height="50" width="50" y="100" x="100" stroke-width="0" fill="#6ac17c"/>
+	</g>
+</svg>

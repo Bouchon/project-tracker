@@ -13,6 +13,7 @@ class Login extends Component {
     clickSwitch = () => this.setState({ login: !this.state.login, email: '', name: '', password: '' })
 
     clickLogin = async (event) => {
+        console.log('login')
         const { email, password } = this.state
         const result = await this.props.authenticateUserMutation({ variables: { email, password }})
         const { id, token } = result.data.authenticateUser
@@ -45,8 +46,8 @@ class Login extends Component {
                 <input type='password' value={ password } onChange={ this.changePassword } />
                 <br />
 
-                <button onClick={ this.clickLogin }>Login</button>
-                <button onClick={ this.clickSwitch }>Sign Up</button>
+                <button onClick={ () => this.clickLogin() }>Login</button>
+                <button onClick={ () => this.clickSwitch() }>Sign Up</button>
             </div>
         ) :
         (
@@ -60,8 +61,8 @@ class Login extends Component {
                 <input type='password' value={ password } onChange={ this.changePassword } />
                 <br />
 
-                <button onClick={ this.clickSignUp }>Sign Up</button>
-                <button onClick={ this.clickSwitch }>Already have an account ?</button>
+                <button onClick={ () => this.clickSignUp() }>Sign Up</button>
+                <button onClick={ () => this.clickSwitch() }>Already have an account ?</button>
             </div>
         )
 
@@ -70,29 +71,27 @@ class Login extends Component {
 }
 
 const SIGNUP_USER_MUTATION = gql`
-mutation SignupUserMutation($email: String!, $password: String!) {
-  signupUser(
-    email: $email,
-    password: $password
-  ) {
-    id
-    token
+  mutation SignupUserMutation($email: String!, $password: String!) {
+    signupUser(
+      email: $email,
+      password: $password
+    ) {
+      id
+      token
+    }
   }
-}
 `
 
 const AUTHENTICATE_USER_MUTATION = gql`
-mutation AuthenticateUserMutation($email: String!, $password: String!) {
-  authenticateUser(
-    email: $email,
-    password: $password
-  ) {
-    token
-    user {
-      id
+  mutation AuthenticateUserMutation($email: String!, $password: String!) {
+    authenticateUser(
+      email: $email,
+      password: $password
+    ) {
+        token
+        id
     }
   }
-}
 `
 
 export default compose(

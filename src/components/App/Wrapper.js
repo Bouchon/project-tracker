@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { Provider } from 'react-redux'
 
 import { GC_AUTH_TOKEN } from '../../constants'
 
 /* REACT ROUTER */
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 /* APOLLO WRAPPER */
 import { ApolloProvider } from 'react-apollo'
@@ -42,12 +43,15 @@ class ApolloWrapper extends Component {
 
 export default class Wrapper extends Component {
     render () {
+        const { store } = this.props
         return (
-            <BrowserRouter>
-                <ApolloWrapper>
-                    { this.props.children }
-                </ApolloWrapper>
-            </BrowserRouter>
+            <Router>
+                <Provider store={ store }>
+                    <ApolloWrapper>
+                        { this.props.children }
+                    </ApolloWrapper>
+                </Provider>
+            </Router>
         )
     }
 }
