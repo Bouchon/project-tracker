@@ -21,21 +21,38 @@ class LoginModal extends Component {
         isLoading: false
     }
 
-    async login () {
+    login () {
         const { email, password } = this.state
-        const { onRequestClose } = this.props
+        const { onRequestClose, onLoginResult } = this.props
         this.setState({ isLoading: true })
-        const loginResult = await this.props.authenticateUserMutation({ variables: { email, password }})
-        this.setState({ isLoading: false })
-        console.log(loginResult)        
+        
+        this.props.authenticateUserMutation({ variables: { email, password } })
+            .then(({ data }) => {
+                this.setState({ isLoading: false })
+                onRequestClose()
+                onLoginResult({ id: data.authenticateUser.id, email, token: data.authenticateUser.token })
+            }) 
+            .catch(error => {
+                this.setState({ isLoading: false })
+                onLoginResult({ error: error.graphQLErrors[0].functionError })
+            })
     }
 
-    async signIn () {
+    signIn () {
         const { email, password } = this.state
-        const { onRequestClose } = this.props
+        const { onRequestClose, onSignInResult } = this.props
         this.setState({ isLoading: true })
-        setTimeout(() => this.setState({ isLoading: false }), 3000)
-        console.log(email, password)
+
+        const signinResult = this.props.signupUserMutation({ variables: { email, password } })
+            .then(({ data }) => {
+                this.setState({ isLoading: false })
+                onRequestClose()
+                onSignInResult({ id: data.signupUser.id, email, token: data.signupUser.token })
+            })
+            .catch(error => {
+                this.setState({ isLoading: false })
+                onSignInResult({ error: error.graphQLErrors[0].functionError })
+            })
     }
 
     render () {

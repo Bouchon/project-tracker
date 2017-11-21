@@ -19,6 +19,7 @@ export default class App extends Component {
       <Wrapper store={ store }>
         <div>
           <Route exact path='/' component={ HomeScreen } />
+          <Route exact path='/test' component={ Login } />
         </div>
       </Wrapper>
     )

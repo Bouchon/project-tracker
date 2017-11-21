@@ -1,23 +1,30 @@
 import React, { Component } from 'react'
-import { Link, Redirect } from 'react-router-dom'
-import { GC_USER_ID, GC_AUTH_TOKEN } from '../../constants'
+import Button from 'material-ui/Button'
+import LoginModal from '../Login/LoginModal'
 
 export default class Header extends Component {
-    clickLogout = () => {
-        localStorage.removeItem(GC_USER_ID)
-        localStorage.removeItem(GC_AUTH_TOKEN)
-    }
+    state = { loginOpen: false }
 
     render () {
-        const userId = localStorage.getItem(GC_USER_ID)
-
-        const login = userId ? <button onClick={ () => this.clickLogout() }>Logout</button> : <Link to='/login'>Login</Link>
-
+        const { loginOpen } = this.state
+        const { login, onLoginResult, onSignInResult, onLogout } = this.props
         return (
-            <div>
-                <span><Link to='/'>Home</Link> - </span>
-                <span><Link to='/create'>New</Link> - </span>
-                <span>{ login }</span>
+            <div style={{ margin: '15px', display: 'flex', justifyContent: 'flex-end' }}>
+                <LoginModal 
+                    open={ loginOpen }
+                    onRequestClose={ () => this.setState({ loginOpen: false }) }
+                    onLoginResult={ onLoginResult }
+                    onSignInResult={ onSignInResult } />
+                
+                { login.token === '' || login.token === undefined ? 
+                    <Button raised color='accent' onClick={ () => this.setState({ loginOpen: true }) }>Connect</Button> :
+                    (
+                        <div>
+                            <span>{ login.email } </span>
+                            <Button raised color='accent' onClick={ onLogout }>Logout</Button>
+                        </div>
+                    )
+                }
             </div>
         )
     }
