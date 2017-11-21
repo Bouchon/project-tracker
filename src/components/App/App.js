@@ -6,8 +6,6 @@ import Header from './Header'
 import Login from './Login'
 
 import HomeScreen from '../Home/HomeScreen'
-import LoginScreen from '../Login/LoginScreen'
-import SigninScreen from '../Login/SigninScreen'
 
 import CreateLink from '../Tuto/CreateLink'
 import LinkList from '../Tuto/LinkList'
@@ -21,8 +19,6 @@ export default class App extends Component {
       <Wrapper store={ store }>
         <div>
           <Route exact path='/' component={ HomeScreen } />
-          <Route exact path='/login' component={ LoginScreen }/>
-          <Route exact path='/signin' component={ SigninScreen } />
         </div>
       </Wrapper>
     )

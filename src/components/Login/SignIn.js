@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
-export default class LoginScreen extends Component {
+export default class SignIn extends Component {
     render () {
         return (
             <div>
-                <h1>Login</h1>
+                <h1>Sign In</h1>
             </div>
         )
     }
