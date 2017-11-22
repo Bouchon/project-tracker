@@ -14,9 +14,9 @@ const root = document.querySelector('#app')
 
 export default class App extends Component {
   render() {
-    const { store } = this.props
+    const { store, persistor } = this.props
     return (
-      <Wrapper store={ store }>
+      <Wrapper store={ store } persistor={ persistor }>
         <div>
           <Route exact path='/' component={ HomeScreen } />
           <Route exact path='/test' component={ Login } />

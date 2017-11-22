@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/es/integration/react'
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
 
 import { GC_AUTH_TOKEN } from '../../constants'
 
@@ -41,15 +43,25 @@ class ApolloWrapper extends Component {
     }
 }
 
+const theme = createMuiTheme({
+    typography: {
+        fontFamily: 'Rubik'
+    }
+})
+
 export default class Wrapper extends Component {
     render () {
-        const { store } = this.props
+        const { store, persistor } = this.props
         return (
             <Router>
                 <Provider store={ store }>
-                    <ApolloWrapper>
-                        { this.props.children }
-                    </ApolloWrapper>
+                    <PersistGate persistor={ persistor }>
+                        <ApolloWrapper>
+                            <MuiThemeProvider theme={ theme }>
+                            { this.props.children }
+                            </MuiThemeProvider>
+                        </ApolloWrapper>
+                    </PersistGate>
                 </Provider>
             </Router>
         )

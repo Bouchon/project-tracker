@@ -1,6 +1,10 @@
 import { LOGIN, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT } from '../action-creators/login'
 
+const defaultState = { id: '', email: '', token: '' }
+
 export default (state, payload) => {
+    state = state === undefined ? defaultState : state
+    console.log(state, payload)
     switch (payload.type) {
         case LOGIN:
         case LOGOUT:

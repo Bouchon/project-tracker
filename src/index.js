@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import store from './store'
+import configureStore from './configureStore'
 import App from './components/App/App'
 
 const root = document.getElementById('app')
-ReactDOM.render(<App store={ store } />, root)
+const { store, persistor } = configureStore()
+ReactDOM.render(<App store={ store } persistor={ persistor } />, root)
