@@ -10,7 +10,7 @@ export default (state, payload) => {
         case LOGOUT:
             return { ...payload.payload }
         case 'persist/REHYDRATE':
-            return { ...payload.payload.login }
+            return payload.payload === undefined ? { ...state } : { ...payload.payload.login }
         default: 
             return { ...state }
     }
