@@ -14,14 +14,17 @@ storiesOf('Button', module)
   .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
   .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
 
-const project_simple = { name: 'Project name', description: 'Project description' }
-const project_longName = { name: 'Long project name miam', description: 'Project description' }
-const project_longDescription = { name: 'Project name', description: 'Project description very long. Project description very long. Project description very long.' }
+const projects = [
+  { name: 'Project name', author: 'Florian Knoblauch', description: 'Project description' },
+  { name: 'Long project name miam this is good', author: 'Admin', description: 'Project description' },
+  { name: 'Project name', author: 'Admin', description: 'Project description very long. Project description very long. Project description very long.' }
+]
+
 storiesOf('Project', module)
-  .add('item', () => (
-    <div>
-      <Project project={ project_simple } />
-      <Project project={ project_longName } />
-      <Project project={ project_longDescription } />
-    </div>
-  ))
+.add('simple', () => (
+  <div>
+    <Project project={ projects[0] } />
+    <Project project={ projects[1] } />
+    <Project project={ projects[2] } />
+  </div>
+))

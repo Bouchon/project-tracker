@@ -17,6 +17,8 @@ import { ApolloLink, split } from 'apollo-client-preset'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
+import App from './App'
+
 class ApolloWrapper extends Component {
     constructor () {
         super()
@@ -49,21 +51,19 @@ const theme = createMuiTheme({
     }
 })
 
-export default class Wrapper extends Component {
+export default class AppWrapper extends Component {
     render () {
         const { store, persistor } = this.props
-        return (
-            <Router>
-                <Provider store={ store }>
-                    <PersistGate persistor={ persistor }>
-                        <ApolloWrapper>
-                            <MuiThemeProvider theme={ theme }>
-                            { this.props.children }
-                            </MuiThemeProvider>
-                        </ApolloWrapper>
-                    </PersistGate>
-                </Provider>
-            </Router>
+        return (            
+            <Provider store={ store }>
+                <PersistGate persistor={ persistor }>
+                    <ApolloWrapper>
+                        <MuiThemeProvider theme={ theme }>
+                            <App />
+                        </MuiThemeProvider>
+                    </ApolloWrapper>
+                </PersistGate>
+            </Provider>
         )
     }
 }
