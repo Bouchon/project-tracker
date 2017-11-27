@@ -1,17 +1,8 @@
-type Link @model {
-  id: ID! @isUnique
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  description: String!
-  url: String!
-  postedBy: User @relation(name: "UsersLinks")
-}
-
 type User @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!
+  name: String! @migrationValue(value: "No description yet")
   email: String @isUnique
   password: String
-  links: [Link!]! @relation(name: "UsersLinks")
 }
