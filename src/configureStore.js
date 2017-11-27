@@ -2,6 +2,8 @@ import { compose, applyMiddleware, createStore } from 'redux'
 import { persistCombineReducers, persistStore } from 'redux-persist'
 import session from 'redux-persist/lib/storage/session'
 import localForage from 'localforage'
+import createHistory from 'history/createBrowserHistory'
+import { routerReducer, routerMiddleware } from 'react-router-redux'
 
 import root from './reducers/root'
 
@@ -11,13 +13,15 @@ const config = {
     whitelist: ['login'],
     debug: true
 }
-const reducer = persistCombineReducers(config, root)
-const enhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 function configureStore() {
-    let store = createStore(reducer, undefined, enhancer(applyMiddleware()))
-    let persistor = persistStore(store)
-    return { store, persistor }
+    const history = createHistory()
+    const middleware = routerMiddleware(history)
+    const reducer = persistCombineReducers(config, { ...root, router: routerReducer })
+    const enhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose    
+    const store = createStore(reducer, undefined, enhancer(applyMiddleware(middleware)))
+    const persistor = persistStore(store)
+    return { store, persistor, history }
 }
 
 export default configureStore

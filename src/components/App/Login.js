@@ -2,71 +2,62 @@ import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
+import Typography from 'material-ui/Typography'
+import TextField from 'material-ui/TextField'
+import Button from 'material-ui/Button'
+import { CircularProgress } from 'material-ui/Progress'
+
 import { GC_USER_ID, GC_AUTH_TOKEN } from '../../constants'
 
+const css = {
+    container: {
+        margin: '30px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
+    inputs: {
+        width: '75vw',
+        maxWidth: '250px'
+    }
+}
 class Login extends Component {
-    state = { login: true, email: '', password: '' }
+    state = { email: '', password: '', isLoading: false }
     
-    changeName = (event) => this.setState({ name: event.target.value })
-    changePassword = (event) => this.setState({ password: event.target.value })
-    changeEmail = (event) => this.setState({ email: event.target.value })
-    clickSwitch = () => this.setState({ login: !this.state.login, email: '', name: '', password: '' })
-
     clickLogin = async (event) => {
-        console.log('login')
         const { email, password } = this.state
-        const result = await this.props.authenticateUserMutation({ variables: { email, password }})
-        const { id, token } = result.data.authenticateUser
-        localStorage.setItem(GC_USER_ID, id)
-        localStorage.setItem(GC_AUTH_TOKEN, token)
-        this.props.history.push('/')
+        const { onRequestClose, onLoginResult } = this.props
+        this.setState({ isLoading: true })
+        
+        this.props.authenticateUserMutation({ variables: { email, password } })
+        .then(({ data }) => {
+            this.setState({ isLoading: false })
+            onLoginResult({ id: data.authenticateUser.id, email, token: data.authenticateUser.token })
+        }) 
+        .catch(error => {
+            this.setState({ isLoading: false })
+            onLoginResult({ error: error.graphQLErrors[0].functionError })
+        })
     }
 
-    clickSignUp = async (event) => { 
-        const { email, password } = this.state
-        const result = await this.props.signupUserMutation({ variables: { email, password } })
-        const { id, token } = result.data.signupUser
-        localStorage.setItem(GC_USER_ID, id)
-        localStorage.setItem(GC_AUTH_TOKEN, token)
-        this.props.history.push('/')
-     }
-
     render () {
-        const { login, email, password } = this.state
+        const { email, password, isLoading } = this.state
 
-        const block = login ?
-        (
-            <div>
-                <h1>Login</h1>
-                <label>Email : </label>
-                <input value={ email } onChange={ this.changeEmail } />
+        return (
+            <div style={ css.container }>
+                <Typography type='display1'>Login</Typography>
                 <br />
-
-                <label>Password : </label>
-                <input type='password' value={ password } onChange={ this.changePassword } />
+                <TextField style={ css.inputs } label='Email' type='email' value={ email } onChange={ evt => this.setState({ email: evt.target.value }) } />
+                <TextField style={ css.inputs } label='Password' type='password' value={ password } onChange={ evt => this.setState({ password: evt.target.value }) } />
                 <br />
-
-                <button onClick={ () => this.clickLogin() }>Login</button>
-                <button onClick={ () => this.clickSwitch() }>Sign Up</button>
-            </div>
-        ) :
-        (
-            <div>
-                <h1>Sign Up</h1>
-                <label>Email : </label>
-                <input value={ email } onChange={ this.changeEmail } />
+                <Button onClick={ () => this.clickLogin() } raised color='accent'>
+                    { isLoading && <CircularProgress size={ 20 } color='accent' style={{ marginRight: '1em' }} /> }
+                    Login
+                </Button>
                 <br />
-
-                <label>Password</label>
-                <input type='password' value={ password } onChange={ this.changePassword } />
-                <br />
-
-                <button onClick={ () => this.clickSignUp() }>Sign Up</button>
-                <button onClick={ () => this.clickSwitch() }>Already have an account ?</button>
+                <Button>Create an account</Button>
             </div>
         )
-
-        return block
     }
 }
 

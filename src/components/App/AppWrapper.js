@@ -53,13 +53,13 @@ const theme = createMuiTheme({
 
 export default class AppWrapper extends Component {
     render () {
-        const { store, persistor } = this.props
+        const { store, persistor, history } = this.props
         return (            
             <Provider store={ store }>
                 <PersistGate persistor={ persistor }>
                     <ApolloWrapper>
                         <MuiThemeProvider theme={ theme }>
-                            <App />
+                            <App history={ history } />
                         </MuiThemeProvider>
                     </ApolloWrapper>
                 </PersistGate>
