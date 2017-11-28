@@ -22,7 +22,7 @@ const css = {
     }
 }
 class Login extends Component {
-    state = { isLogin: true, email: '', name: '', password: '', isLoginLoading: false, isSignInLoading: false }
+    state = { isLogin: true, email: '', name: '', password: '', isLoginLoading: false, isSigninLoading: false }
     
     clickLogin = async (event) => {
         const { email, password } = this.state
@@ -32,7 +32,7 @@ class Login extends Component {
         this.props.authenticateUserMutation({ variables: { email, password } })
             .then(({ data }) => {
                 this.setState({ isLoading: false })
-                onLoginResult({ id: data.authenticateUser.id, email, token: data.authenticateUser.token })
+                onLoginResult({ id: data.authenticateUser.id, email, name: data.authenticateUser.name, token: data.authenticateUser.token })
             }) 
             .catch(error => {
                 this.setState({ isLoading: false })
@@ -42,33 +42,33 @@ class Login extends Component {
 
     clickSignin = async (event) => {
         const { name, email, password } = this.state
-        const { onSignInResult } = this.props
-        this.setState({ isSignInLoading: true })
+        const { onSigninResult } = this.props
+        this.setState({ isSigninLoading: true })
 
         const signinResult = this.props.signupUserMutation({ variables: { name, email, password } })
             .then(({ data }) => {
-                this.setState({ isSignInLoading: false })
-                onSignInResult({ id: data.signupUser.id, email, token: data.signupUser.token })
+                this.setState({ isSigninLoading: false })
+                onSigninResult({ id: data.signupUser.id, email, name: data.signupUser.name, token: data.signupUser.token })
             })
             .catch(error => {
-                this.setState({ isSignInLoading: false })
-                onSignInResult({ error: error.graphQLErrors[0].functionError })
+                this.setState({ isSigninLoading: false })
+                onSigninResult({ error: error.graphQLErrors[0].functionError })
             })
     }
 
     render () {
-        const { isLogin, email, name, password, isLoginLoading, isSignInLoading } = this.state
+        const { isLogin, email, name, password, isLoginLoading, isSigninLoading } = this.state
         
         const loginBtn = (
             <Button onClick={ () => this.clickLogin() } raised color='accent'>
-                { isLoginLoading && <CircularProgress size={ 20 } color='accent' style={{ marginRight: '1em' }} /> }
+                { isLoginLoading && <CircularProgress size={ 20 } color='primary' style={{ marginRight: '1em' }} /> }
                 Login
             </Button>
         )
 
         const signInBtn = (
             <Button onClick={ () => this.clickSignin() } raised color='accent'>
-                { isSignInLoading && <CircularProgress size={ 20 } color='accent' style={{ marginRight: '1em' }} /> }
+                { isSigninLoading && <CircularProgress size={ 20 } color='primary' style={{ marginRight: '1em' }} /> }
                 Sign in
             </Button>
         )
@@ -86,10 +86,6 @@ class Login extends Component {
                 <TextField style={ css.inputs } label='Password' type='password' value={ password } onChange={ evt => this.setState({ password: evt.target.value }) } />
                 <br />
                 { isLogin ? loginBtn : signInBtn }
-                {/* <Button onClick={ () => this.clickLogin() } raised color='accent'>
-                    { isLoginLoading && <CircularProgress size={ 20 } color='accent' style={{ marginRight: '1em' }} /> }
-                    Login
-                </Button> */}
                 <br />
                 { switchBtn }
             </div>
@@ -106,6 +102,7 @@ const SIGNUP_USER_MUTATION = gql`
     ) {
       id
       token
+      name
     }
   }
 `
@@ -118,6 +115,7 @@ const AUTHENTICATE_USER_MUTATION = gql`
     ) {
         token
         id
+        name
     }
   }
 `

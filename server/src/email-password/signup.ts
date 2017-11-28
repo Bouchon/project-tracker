@@ -5,10 +5,10 @@ import * as validator from 'validator'
 
 interface User {
   id: string
+  name: string
 }
 
 interface EventData {
-  name: string
   email: string
   password: string
 }
@@ -49,7 +49,7 @@ export default async (event: FunctionEvent<EventData>) => {
     // generate node token for new User node
     const token = await graphcool.generateNodeToken(userId, 'User')
 
-    return { data: { id: userId, token } }
+    return { data: { id: userId, name, token } }
   } catch (e) {
     console.log(e)
     return { error: 'An unexpected error occured during signup.' }

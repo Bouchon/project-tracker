@@ -54,7 +54,7 @@ class Header extends Component {
                     <IconButton><NotificationsIcon /></IconButton>
                     <List style={ css.user }>
                         <ListItem button onClick={ event => this.setState({ menuOpen: true, anchorEl: event.currentTarget }) }>
-                            <ListItemText primary={ login.email } />
+                            <ListItemText primary={ login.name } />
                         </ListItem>
                     </List>
 
@@ -69,9 +69,10 @@ class Header extends Component {
                     <Typography type='display3'>Project Tracker</Typography>
                 </div>
                 <Tabs style={ css.headerLine3 } value={ selectedTab }>
-                    <Tab onClick={ () => this.redirect('/project', 0) } label='Projects' />
-                    <Tab onClick={ () => this.redirect('/task', 1) } label='Tasks' />
-                    <Tab onClick={ () => this.redirect('/user', 2) } label='Users' />
+                    <Tab onClick={ () => this.redirect('/', 0) } label='Home' />
+                    <Tab onClick={ () => this.redirect('/project', 1) } label='Projects' />
+                    <Tab onClick={ () => this.redirect('/task', 2) } label='Tasks' />
+                    <Tab onClick={ () => this.redirect('/user', 3) } label='Users' />
                 </Tabs>
             </AppBar>
         )
@@ -79,35 +80,3 @@ class Header extends Component {
 }
 
 export default connect()(Header)
-// export default class Header extends Component {
-//     state = { loginOpen: false }
-
-//     render () {
-//         const { loginOpen } = this.state
-//         const { login, onLoginResult, onSignInResult, onLogout } = this.props
-//         return (
-//             <div>
-//                 <LoggedInHeader />
-//                 <LoginModal 
-//                     open={ loginOpen }
-//                     onRequestClose={ () => this.setState({ loginOpen: false }) }
-//                     onLoginResult={ onLoginResult }
-//                     onSignInResult={ onSignInResult } />
-                
-//                 { login.token === '' || login.token === undefined ? 
-//                     (
-//                         <div style={ css.header}>
-//                             <Button style={ css.loginButton } raised color='accent' onClick={ () => this.setState({ loginOpen: true }) }>Connect</Button>
-//                         </div>
-//                     ) :
-//                     (
-//                         <div style={ css.header }>
-//                             <Typography>{ login.email } </Typography>
-//                             <Button style={ css.loginButton } raised onClick={ onLogout }>Logout</Button>
-//                         </div>
-//                     )
-//                 }
-//             </div>
-//         )
-//     }
-// }

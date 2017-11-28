@@ -20,11 +20,11 @@ const css = {
 }
 
 const projects = {
-    ['1']: { id: 1, author: 'FK', name: 'Project title', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
-    ['2']: { id: 2, author: 'FK', name: 'Project title', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
-    ['3']: { id: 3, author: 'FK', name: 'Project title', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
-    ['4']: { id: 4, author: 'FK', name: 'Project title', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
-    ['5']: { id: 5, author: 'FK', name: 'Project title', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 }
+    ['1']: { id: 1, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
+    ['2']: { id: 2, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
+    ['3']: { id: 3, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
+    ['4']: { id: 4, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
+    ['5']: { id: 5, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 }
 }
 
 export default class ProjectScreen extends Component {

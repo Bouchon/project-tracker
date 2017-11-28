@@ -40,11 +40,11 @@ functions:
     handler:
       code: src/email-password/loggedInUser.ts
 
-  hello:
-    handler:
-      code: src/hello.js
+  createProject:
     type: resolver
-    schema: src/hello.graphql
+    schema: src/project/createProject.graphql
+    handler:
+      code: src/project/createProject.ts
 
 
 # Model/Relation permissions are used to limit the API access

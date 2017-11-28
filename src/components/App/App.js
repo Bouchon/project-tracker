@@ -22,7 +22,7 @@ class App extends Component {
           alert(data.error)
           this.props.logOut()
       } else {
-          this.props.logIn(data.id, data.email, data.token)
+          this.props.logIn(data.id, data.email, data.name, data.token)
       }
   }
 
@@ -31,7 +31,7 @@ class App extends Component {
           alert(data.error)
           this.props.logOut()
       } else {
-          this.props.logIn(data.id, data.email, data.token)
+          this.props.logIn(data.id, data.email, data.name, data.token)
       }
   }
 
@@ -44,15 +44,17 @@ class App extends Component {
     const { loginOpen } = this.state
 
     if (login.token === '') {
-        return <Login onLoginResult={ data => this.handleLoginResult(data) } />
+        return (
+            <Login 
+                onLoginResult={ data => this.handleLoginResult(data) }
+                onSigninResult={ data => this.handleSignInResult(data) } />
+        )
     }
 
     return (
         <div>
             <Header
                 login={ login }
-                onLoginResult={ data => this.handleLoginResult(data) }
-                onSignInResult={ data => this.handleSignInResult(data) }
                 onLogout={ () => this.handleLogout() } />
             <AppRoutes history={ history } />
         </div>

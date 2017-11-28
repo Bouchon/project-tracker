@@ -5,4 +5,13 @@ type User @model {
   name: String! @migrationValue(value: "No description yet")
   email: String @isUnique
   password: String
+  projects: [Project!]! @relation(name: "UserProjects")
+}
+
+type Project @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  author: User! @relation(name: "UserProjects")
+  name: String!
 }

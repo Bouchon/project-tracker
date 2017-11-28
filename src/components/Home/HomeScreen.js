@@ -1,19 +1,17 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
-import Logo from '../../logo.svg'
 import Typography from 'material-ui/Typography'
-import Button from 'material-ui/Button'
 
 const css = {
-    main: {
-    }
+    main: { padding: '30px' }
 }
 
 class HomeScreen extends Component {
     render () {
         return (
             <div style={ css.main }>
+                <Typography align='center' type='display2'>Welcome to project tracker!</Typography>
             </div>
         )
     }

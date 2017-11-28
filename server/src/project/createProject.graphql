@@ -1,0 +1,9 @@
+type CreateProjectPayload {
+    id: ID!
+    author: User!
+    name: String!
+}
+
+extends type Mutation {
+    createProject(token: String!, name: String!): CreateProjectPayload
+}

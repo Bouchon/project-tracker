@@ -1,6 +1,6 @@
 import { LOGIN, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT } from '../action-creators/login'
 
-const defaultState = { id: '', email: '', token: '' }
+const defaultState = { id: '', email: '', name: '', token: '' }
 
 export default (state, payload) => {
     state = state === undefined ? defaultState : state
