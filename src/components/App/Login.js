@@ -7,8 +7,6 @@ import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
 import { CircularProgress } from 'material-ui/Progress'
 
-import { GC_USER_ID, GC_AUTH_TOKEN } from '../../constants'
-
 const css = {
     container: {
         margin: '30px',

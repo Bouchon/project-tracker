@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import Typography from 'material-ui/Typography'
 import Button from 'material-ui/Button'
@@ -27,11 +30,22 @@ const projects = {
     ['5']: { id: 5, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 }
 }
 
-export default class ProjectScreen extends Component {
+class ProjectScreen extends Component {
+    handleCreateProject (authorId, name) {
+        this.props.createProjectMutation({ variables: { authorId, name } })
+        .then(({ data }) => {
+            console.info('project ' + name + ' created! (id=' + data.id + ')')
+        }) 
+        .catch(error => {
+            console.error(error)
+        })
+    }
+
     render () {
+        const { login } = this.props
         return (
             <div style={ css.container }>
-                <Button fab color='accent' style={ css.fab }><AddIcon /></Button>
+                <Button onClick={ () => this.handleCreateProject(login.id, "Nouveau projet") } fab color='accent' style={ css.fab }><AddIcon /></Button>
             { 
                 Object.values(projects).map(project => (
                     <Project key={ project.id } project={ project } />
@@ -41,3 +55,20 @@ export default class ProjectScreen extends Component {
         )
     }
 }
+
+const CREATE_PROJECT_MUTATION = gql`
+mutation CreateProjectMutation($authorId: String!, $name: String!) {
+  createProject(
+    authorId: $authorId,
+    name: $name
+  ) {
+    id
+  }
+}
+`
+
+const mapStateToProps = ({ login }) => ({ login })
+
+export default connect(mapStateToProps)(compose(
+    graphql(CREATE_PROJECT_MUTATION, { name: 'createProjectMutation' })
+)(ProjectScreen))
