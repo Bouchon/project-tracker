@@ -5,14 +5,14 @@ export const DELETE = '@@PROJECT_DELETE'
 export function addProject (project) {
     return {
         type: ADD,
-        payload: { project }
+        payload: project
     }
 }
 
 export function updateProject (project) {
     return {
         type: UPDATE,
-        payload: { project }
+        payload: project
     }
 }
 

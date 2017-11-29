@@ -2,14 +2,14 @@ import { LOGIN, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT } from '../action-creators/lo
 
 const defaultState = { id: '', email: '', name: '', token: '' }
 
-export default (state, payload) => {
+export default (state, action) => {
     state = state === undefined ? defaultState : state
-    switch (payload.type) {
+    switch (action.type) {
         case LOGIN:
         case LOGOUT:
-            return { ...payload.payload }
+            return { ...action.payload }
         case 'persist/REHYDRATE':
-            return payload.payload === undefined ? { ...state } : { ...payload.payload.login }
+            return action.payload === undefined ? { ...state } : { ...action.payload.login }
         default: 
             return { ...state }
     }

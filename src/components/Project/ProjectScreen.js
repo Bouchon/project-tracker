@@ -7,6 +7,7 @@ import Typography from 'material-ui/Typography'
 import Button from 'material-ui/Button'
 import AddIcon from 'material-ui-icons/Add'
 
+import { addProject, updateProject, deleteProject } from '../../action-creators/project'
 import Project from './Project'
 
 const css = {
@@ -22,19 +23,13 @@ const css = {
     }
 }
 
-const projects = {
-    ['1']: { id: 1, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
-    ['2']: { id: 2, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
-    ['3']: { id: 3, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
-    ['4']: { id: 4, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 },
-    ['5']: { id: 5, author: 'FK', name: 'Project name', tasksCount: 10, tasksCompleteCount: 5, membersCount: 5 }
-}
-
 class ProjectScreen extends Component {
     handleCreateProject (authorId, name) {
-        this.props.createProjectMutation({ variables: { authorId, name } })
+        const { createProjectMutation, addProject } = this.props
+
+        createProjectMutation({ variables: { authorId, name } })
         .then(({ data }) => {
-            console.info('project ' + name + ' created! (id=' + data.id + ')')
+            addProject(data.createProject)
         }) 
         .catch(error => {
             console.error(error)
@@ -42,13 +37,13 @@ class ProjectScreen extends Component {
     }
 
     render () {
-        const { login } = this.props
+        const { login, project } = this.props
         return (
             <div style={ css.container }>
                 <Button onClick={ () => this.handleCreateProject(login.id, "Nouveau projet") } fab color='accent' style={ css.fab }><AddIcon /></Button>
             { 
-                Object.values(projects).map(project => (
-                    <Project key={ project.id } project={ project } />
+                Object.values(project).map(p => (
+                    <Project key={ p.id } project={ p } />
                 ))
             }
             </div>
@@ -57,18 +52,24 @@ class ProjectScreen extends Component {
 }
 
 const CREATE_PROJECT_MUTATION = gql`
-mutation CreateProjectMutation($authorId: String!, $name: String!) {
+mutation CreateProjectMutation($authorId: ID!, $name: String!) {
   createProject(
     authorId: $authorId,
     name: $name
   ) {
     id
+    name
+    author {
+        id
+        name
+    }
   }
 }
 `
 
-const mapStateToProps = ({ login }) => ({ login })
+const mapStateToProps = ({ login, project }) => ({ login, project })
 
-export default connect(mapStateToProps)(compose(
-    graphql(CREATE_PROJECT_MUTATION, { name: 'createProjectMutation' })
-)(ProjectScreen))
+export default 
+    connect(mapStateToProps, { addProject, updateProject, deleteProject })(
+        compose(graphql(CREATE_PROJECT_MUTATION, { name: 'createProjectMutation' }))
+    (ProjectScreen))

@@ -10,7 +10,7 @@ import root from './reducers/root'
 const config = { 
     key: 'primary', 
     storage: localForage,
-    whitelist: ['login'],
+    whitelist: ['login', 'project'],
     debug: true
 }
 

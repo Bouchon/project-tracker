@@ -38,13 +38,19 @@ const css = {
 export default class Project extends Component {
     state = { menuOpen: false, anchorEl: null }
 
+    getInitials (name) {
+        const words = name.split(' ')
+        return words.length === 1 ? 
+            words[0][0].toUpperCase() : words[0][0].toUpperCase() + words[1][0].toUpperCase()
+    }
+
     render () {
         const { menuOpen, anchorEl } = this.state
         const { project } = this.props
-
+        console.log(project)
         return (
             <Paper style={ css.paper }>
-                <Avatar style={ css.avatar }>{ project.author }</Avatar>
+                <Avatar style={ css.avatar }>{ this.getInitials(project.author.name) }</Avatar>
                 <Typography style={ css.name } type='title'>{ project.name }</Typography>
                 <div style={ css.progress }>
                     <Typography style={ css.progressLabel }>{ project.tasksCompleteCount } / { project.tasksCount } tasks</Typography>
