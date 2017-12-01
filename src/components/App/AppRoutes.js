@@ -4,6 +4,7 @@ import { ConnectedRouter } from 'react-router-redux'
 
 import HomeScreen from '../Home/HomeScreen'
 import ProjectScreen from '../Project/ProjectScreen'
+import CreateProjectScreen from '../Project/CreateProjectScreen'
 import TaskScreen from '../Task/TaskScreen'
 
 export default class AppRoutes extends Component {
@@ -13,7 +14,8 @@ export default class AppRoutes extends Component {
             <ConnectedRouter history={ history }>
                 <div>
                     <Route exact path='/' component={ HomeScreen } />
-                    <Route path='/project' component={ ProjectScreen } />
+                    <Route exact path='/project' component={ ProjectScreen } />           
+                    <Route exact path='/project/create' component={ CreateProjectScreen } />
                     <Route path='/task' component={ TaskScreen } />
                     <Route path='/user' component={ TaskScreen } />
                 </div>

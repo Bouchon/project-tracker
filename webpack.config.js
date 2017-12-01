@@ -4,11 +4,15 @@ module.exports = options => {
     return {
         entry: __dirname + '/src/index.js',
         output: {
-            path: __dirname + '/public',
+            publicPath: '/public/',
             filename: 'bundle.js',
         },
         devtool: 'source-map',
-        devServer: { historyApiFallback: true },
+        devServer: { 
+            historyApiFallback: {
+                index: '/public/'
+            } 
+        },
         module: {
             rules: [
                 {

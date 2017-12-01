@@ -44,6 +44,19 @@ class Header extends Component {
         this.setState({ selectedTab: value })
     }
 
+    componentWillMount () {
+        const pathName = window.location.pathname
+        let selected = 0
+        switch (pathName) {
+            case '/project':
+            case '/project/create':
+                this.state.selectedTab = 1; break
+                
+            case '/task': this.state.selectedTab = 2; break
+            case '/user': this.state.selectedTab = 3; break
+        }
+    }
+
     render () {
         const { selectedTab, menuOpen, anchorEl } = this.state
         const { login, onLogout } = this.props

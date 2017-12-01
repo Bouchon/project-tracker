@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
+import { push } from 'react-router-redux'
 
 import Typography from 'material-ui/Typography'
 import Button from 'material-ui/Button'
 import AddIcon from 'material-ui-icons/Add'
 
-import { addProject, updateProject, deleteProject } from '../../action-creators/project'
+import { updateProject, deleteProject } from '../../action-creators/project'
 import Project from './Project'
 
 const css = {
@@ -24,52 +25,22 @@ const css = {
 }
 
 class ProjectScreen extends Component {
-    handleCreateProject (authorId, name) {
-        const { createProjectMutation, addProject } = this.props
-
-        createProjectMutation({ variables: { authorId, name } })
-        .then(({ data }) => {
-            addProject(data.createProject)
-        }) 
-        .catch(error => {
-            console.error(error)
-        })
-    }
-
     render () {
         const { login, project } = this.props
         return (
             <div style={ css.container }>
-                <Button onClick={ () => this.handleCreateProject(login.id, "Nouveau projet") } fab color='accent' style={ css.fab }><AddIcon /></Button>
-            { 
-                Object.values(project).map(p => (
+                <Button onClick={ () => this.props.dispatch(push('/project/create')) } fab color='accent' style={ css.fab }><AddIcon /></Button>
+            { Object.values(project).length === 0 && (
+                <Typography>Use the + button to create a new project!</Typography>
+            )}            
+            { Object.values(project).map(p => (
                     <Project key={ p.id } project={ p } />
-                ))
-            }
+            ))}
             </div>
         )
     }
 }
 
-const CREATE_PROJECT_MUTATION = gql`
-mutation CreateProjectMutation($authorId: ID!, $name: String!) {
-  createProject(
-    authorId: $authorId,
-    name: $name
-  ) {
-    id
-    name
-    author {
-        id
-        name
-    }
-  }
-}
-`
-
 const mapStateToProps = ({ login, project }) => ({ login, project })
 
-export default 
-    connect(mapStateToProps, { addProject, updateProject, deleteProject })(
-        compose(graphql(CREATE_PROJECT_MUTATION, { name: 'createProjectMutation' }))
-    (ProjectScreen))
+export default connect(mapStateToProps)(ProjectScreen)
