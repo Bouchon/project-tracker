@@ -2,16 +2,45 @@ type User @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!
-  name: String! @migrationValue(value: "No description yet")
+  name: String!
   email: String @isUnique
   password: String
-  projects: [Project!]! @relation(name: "UserProjects")
+  authorProjects: [Project!]! @relation(name: "ProjectAuthor")
+  memberProjects: [Project!]! @relation(name: "ProjectMembers")
+  authorTask: [Task!]! @relation(name: "TaskAuthor")
+  assigneeTasks: [Task!]! @relation(name: "TaskAssignees")
 }
 
 type Project @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!
-  author: User! @relation(name: "UserProjects")
   name: String!
+  description: String!
+  author: User! @relation(name: "ProjectAuthor")
+  tasks: [Task!]! @relation(name: "ProjectTasks")
+  members: [User!]! @relation(name: "ProjectMembers")
+  metas: [Meta!]! @relation(name: "ProjectMetas")
+}
+
+type Task @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  description: String!
+  state: String
+  project: Project! @relation(name: "ProjectTasks")
+  author: User! @relation(name: "TaskAuthor")
+  assignees: [User!]! @relation(name: "TaskAssignees")
+  metas: [Meta!]! @relation(name: "TaskMetas")
+}
+
+type Meta @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String! @isUnique
+  projects: [Project!]! @relation(name: "ProjectMetas")
+  tasks: [Task!]! @relation(name: "TaskMetas")
 }

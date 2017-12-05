@@ -4,18 +4,26 @@ import { GraphQLClient } from 'graphql-request'
 interface User {
     id: string
     name: string
-    email: string
+}
+
+interface Meta {
+    id: string
+    name: string
 }
 
 interface Project {
     id: string
-    author: User
     name: string
+    description: string
+    author: User
+    metas: [Meta]
 }
 
 interface EventData {
-    authorEmail: string
     name: string
+    description: string
+    authorId: string
+    metaIds: [string]
 }
 
 export default async (event: FunctionEvent<EventData>) => {
@@ -24,58 +32,65 @@ export default async (event: FunctionEvent<EventData>) => {
     try {
         const graphcool = fromEvent(event)
         const api = graphcool.api('simple/v1')
-        const { authorEmail, name } = event.data
+        const { name, description, authorId, metaIds } = event.data
 
-        // get author by email
-        const author: User = await getUserByEmail(api, authorEmail).then(r => r.User)
+        // get author by id
+        const author: User = await getUserById(api, authorId).then(r => r.User)
 
         // no author found
         if (!author) {
             return { error: 'User not found!' }
         }
 
+        // get metas
+        const metas: [Meta] = await getMetasByIds(api, metaIds).then(r => r.Metas)
+
         // create new project
-        const project = await createGraphcoolProject(api, author, name)
+        const project = await createGraphcoolProject(api, name, description, author, metas)
     } catch (e) {
         console.log(e)
         return { error: 'An unexpected error occured during project creation' }
     }
 }
 
-async function getUserByEmail(api: GraphQLClient, email: string): Promise<{ User }> {
+async function getUserById(api: GraphQLClient, id: string): Promise<{ User }> {
     const query = `
-        query getUserByEmail($email: String!) {
-            User(email: $email) {
+        query getUserById($id: ID!) {
+            User(id: $id) {
                 id
                 name
-                email
             }
         }
     `
   
-    const variables = {
-      email,
-    }
+    const variables = { id }
   
     return api.request<{ User }>(query, variables)
 }
 
-async function createGraphcoolProject(api: GraphQLClient, author: User, name: string): Promise<string> {
+async function getMetasByIds(api: GraphQLClient, metaIds: [string]) : Promise<{ [Meta] }> {
+    const query = `
+        query getMetasByIds($ids: [ID!]!) {
+            Meta
+        }
+    `
+}
+
+async function createGraphcoolProject(api: GraphQLClient, name: string, description: string, author: User, metas: [Meta]): Promise<string> {
     const mutation = `
-      mutation createGraphcoolProject($author: User!, $name: String!) {
+      mutation createGraphcoolProject($name: String!, $description: String!, $author: User!, $metas: [Meta!]!) {
         createProject(
-          author: $author,
-          name: $name
+            name: $name,
+            description: $description,
+            author: $author,
+            metas: $metas
         ) {
           id
         }
       }
     `
   
-    const variables = {
-      author,
-      name
-    }
+    const variables = { name, description, author, metas }
   
     return api.request<{ createProject: Project }>(mutation, variables)
         .then(r => r.createProject.id)

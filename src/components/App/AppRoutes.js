@@ -6,6 +6,7 @@ import HomeScreen from '../Home/HomeScreen'
 import ProjectScreen from '../Project/ProjectScreen'
 import CreateProjectScreen from '../Project/CreateProjectScreen'
 import TaskScreen from '../Task/TaskScreen'
+import UserScreen from '../User/UserScreen'
 
 export default class AppRoutes extends Component {
     render () {
@@ -17,7 +18,7 @@ export default class AppRoutes extends Component {
                     <Route exact path='/project' component={ ProjectScreen } />           
                     <Route exact path='/project/create' component={ CreateProjectScreen } />
                     <Route path='/task' component={ TaskScreen } />
-                    <Route path='/user' component={ TaskScreen } />
+                    <Route path='/user' component={ UserScreen } />
                 </div>
             </ConnectedRouter>
         )
