@@ -9,6 +9,7 @@ interface User {
 }
 
 interface EventData {
+  name: string
   email: string
   password: string
 }

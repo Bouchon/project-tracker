@@ -1,9 +1,0 @@
-type CreateProjectPayload {
-    id: ID!
-    name: String!
-    description: String!
-}
-
-extend type Mutation {
-    createProject(name: String!, description: String!, authorId: String!, metaIds: [String!]): CreateProjectPayload
-}

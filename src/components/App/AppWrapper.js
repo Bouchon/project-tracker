@@ -22,7 +22,7 @@ import App from './App'
 class ApolloWrapper extends Component {
     constructor () {
         super()
-        const httpLink = new HttpLink({ uri: 'https://api.graph.cool/simple/v1/cja3poo7h7snt0109pfpbc5h2' })
+        const httpLink = new HttpLink({ uri: 'https://api.graph.cool/simple/v1/cjatqojzf1yl501032rzt1idv' })
         const middlewareAuthLink = new ApolloLink((operation, forward) => {
             const token = localStorage.getItem(GC_AUTH_TOKEN)
             const authorizationHeader = token ? `Bearer ${token}` : null

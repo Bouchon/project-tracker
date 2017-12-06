@@ -1,8 +1,0 @@
-type CreateMetaPayload {
-    id: ID!
-    name: String!
-}
-
-extends type Mutation {
-    createMeta(name: String!): CreateMetaPayload
-}
