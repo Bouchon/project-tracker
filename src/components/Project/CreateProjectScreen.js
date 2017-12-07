@@ -43,9 +43,11 @@ class CreateProjectScreen extends Component {
     handleCreateProject () {
         const { login, createProjectMutation, addProject, redirect } = this.props
         const { project } = this.state
-        createProjectMutation({ variables: { authorId: login.id, name: project.name } })
+        createProjectMutation({ variables: { authorId: login.id, name: project.name, description: project.description } })
         .then(({ data }) => {
-            addProject(data.createProject)
+            project.id = data.createProject.id
+            project.author = login
+            addProject(project)
             redirect('/project')
         }) 
         .catch(error => {
@@ -79,17 +81,13 @@ class CreateProjectScreen extends Component {
 }
 
 const CREATE_PROJECT_MUTATION = gql`
-mutation CreateProjectMutation($authorId: ID!, $name: String!) {
+mutation CreateProjectMutation($authorId: ID!, $name: String!, $description: String!) {
   createProject(
     authorId: $authorId,
     name: $name
+    description: $description
   ) {
     id
-    name
-    author {
-        id
-        name
-    }
   }
 }
 `
