@@ -25,15 +25,28 @@ const css = {
 }
 
 class ProjectScreen extends Component {
+    componentWillMount () {
+        const { allProjectsQuery } = this.props
+        if (allProjectsQuery.loading === false) {
+            allProjectsQuery.refetch()
+        }
+    }
     render () {
-        const { login, project } = this.props
+        const { login, project, allProjectsQuery } = this.props
+        let allProjects = []
+        if (allProjectsQuery.loading === false && allProjectsQuery.allProjects !== undefined) {
+            allProjects = allProjectsQuery.allProjects
+            console.log(allProjectsQuery)
+        }  
+        const myProjects = Object.values(allProjects).filter(p => p.author.id === login.id)
         return (
             <div style={ css.container }>
                 <Button onClick={ () => this.props.dispatch(push('/project/create')) } fab color='accent' style={ css.fab }><AddIcon /></Button>
-            { Object.values(project).length === 0 && (
+            { allProjects.loading === true && <Typography>Loading...</Typography> }
+            { myProjects.length === 0 && allProjects.loading === false && (
                 <Typography>Use the + button to create a new project!</Typography>
             )}            
-            { Object.values(project).map(p => (
+            { myProjects.map(p => (
                     <Project key={ p.id } project={ p } />
             ))}
             </div>
@@ -41,6 +54,24 @@ class ProjectScreen extends Component {
     }
 }
 
+const ALL_PROJECTS_QUERY = gql`
+query AllProjectsQuery {
+    allProjects {
+        id
+        description
+        name
+        author {
+            id
+            name
+            email
+        }
+    }
+}
+`
+
 const mapStateToProps = ({ login, project }) => ({ login, project })
 
-export default connect(mapStateToProps)(ProjectScreen)
+export default 
+    connect(mapStateToProps)
+        (compose(graphql(ALL_PROJECTS_QUERY, { name: 'allProjectsQuery' }))
+    (ProjectScreen))

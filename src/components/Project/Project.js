@@ -47,7 +47,6 @@ export default class Project extends Component {
     render () {
         const { menuOpen, anchorEl } = this.state
         const { project } = this.props
-        console.log(project)
         return (
             <Paper style={ css.paper }>
                 <Avatar style={ css.avatar }>{ this.getInitials(project.author.name) }</Avatar>
