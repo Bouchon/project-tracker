@@ -30,6 +30,7 @@ const css = {
 
 export default class TaskScreen extends Component {
     render () {
+        console.log(this.props.match.params)
         return (
             <div style={ css.container }>
             { Object.values(projects).map(project => (

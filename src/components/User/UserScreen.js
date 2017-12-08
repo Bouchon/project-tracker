@@ -33,6 +33,7 @@ const css = {
 
 class UserScreen extends Component {
     render () {
+        console.log(this.props.match.params)
         return (
             <div style={ css.container }>
             { Object.values(users).map(user => (

@@ -36,7 +36,6 @@ class ProjectScreen extends Component {
         let allProjects = []
         if (allProjectsQuery.loading === false && allProjectsQuery.allProjects !== undefined) {
             allProjects = allProjectsQuery.allProjects
-            console.log(allProjectsQuery)
         }  
         const myProjects = Object.values(allProjects).filter(p => p.author.id === login.id)
         return (

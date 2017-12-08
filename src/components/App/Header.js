@@ -2,74 +2,61 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import Menu, { MenuItem } from 'material-ui/Menu'
-import List, { ListItem, ListItemText } from 'material-ui/List'
-import Typography from 'material-ui/Typography'
+import Hidden from 'material-ui/Hidden'
 import AppBar from 'material-ui/AppBar'
-import Tabs, { Tab } from 'material-ui/Tabs'
+import Drawer from 'material-ui/Drawer'
+import Menu, { MenuItem } from 'material-ui/Menu'
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
+import Divider from 'material-ui/Divider'
+import Typography from 'material-ui/Typography'
 import Button from 'material-ui/Button'
 import IconButton from 'material-ui/IconButton'
+import MenuIcon from 'material-ui-icons/Menu'
 import NotificationsIcon from 'material-ui-icons/Notifications'
 
 import Logo from '../../logo.svg'
-import LoginModal from '../Login/LoginModal'
+import AppMenu from './AppMenu'
 
+const drawerWidth = 200
 const css = {
-    headerLine1: {
-        paddingRight: '15px',
+    container: { padding: '8px 8px 8px ' + (8 + drawerWidth) + 'px' },
+    drawerHeader: {
+        height: '48px',
+        padding: '8px 16px',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end'
+        flexDirection: 'column',
+        justifyContent: 'center'
     },
-    user: {
-        flex: '0 1 auto'
-    },
-    headerLine2: {
-        padding: '0 10vw',
-        display: 'flex'
-    },
-    logo: {
-        marginRight: '-30px'
-    },
-    headerLine3: {
-        padding: '0 10vw'
-    }
+    line1: { display: 'flex', alignItems: 'center' },
+    flexSpace: { flexGrow: 1 }
 }
 
 class Header extends Component {
-    state = { selectedTab: 0, menuOpen: false, anchorEl: null }
+    state = { drawerOpen: false, menuOpen: false, anchorEl: null }
 
     redirect (url, value) {
         this.props.dispatch(push(url))
-        this.setState({ selectedTab: value })
-    }
-
-    componentWillMount () {
-        const pathName = window.location.pathname
-        let selected = 0
-        switch (pathName) {
-            case '/project':
-            case '/project/create':
-                this.state.selectedTab = 1; break
-                
-            case '/task': this.state.selectedTab = 2; break
-            case '/user': this.state.selectedTab = 3; break
-        }
     }
 
     render () {
-        const { selectedTab, menuOpen, anchorEl } = this.state
+        const { drawerOpen, menuOpen, anchorEl } = this.state
         const { login, onLogout } = this.props
         
         return (
-            <AppBar position='static'>
-                <div style={ css.headerLine1 }>
+            <AppBar position='static' style={ css.container }>
+                <div style={ css.line1 }>
+                    <Hidden mdUp>
+                        <Drawer type='temporary' open={ drawerOpen } onRequestClose={ () => this.setState({ drawerOpen: false }) }><AppMenu /></Drawer>
+                        <IconButton color='inherit' onClick={ () => this.setState({ drawerOpen: true }) }><MenuIcon /></IconButton>
+                    </Hidden>
+                    <Hidden mdDown>
+                        <Drawer type='permanent' open><AppMenu /></Drawer>
+                    </Hidden>
+
+                    <Typography color='inherit' type='title'>My Projects</Typography>
+                    <div style={ css.flexSpace }></div>
                     <IconButton><NotificationsIcon /></IconButton>
-                    <List style={ css.user }>
-                        <ListItem button onClick={ event => this.setState({ menuOpen: true, anchorEl: event.currentTarget }) }>
-                            <ListItemText primary={ login.name } />
-                        </ListItem>
-                    </List>
+                    <Button color='inherit' onClick={ evt => this.setState({ menuOpen: true, anchorEl: evt.currentTarget }) }>{ login.name }</Button>
 
                     <Menu anchorEl={ anchorEl } open={ menuOpen } onRequestClose={ () => this.setState({ menuOpen: false }) }>
                         <MenuItem disabled>{ login.email }</MenuItem>
@@ -77,16 +64,6 @@ class Header extends Component {
                         <MenuItem onClick={ onLogout }>Log out</MenuItem>
                     </Menu>
                 </div>
-                <div style={ css.headerLine2 }>
-                    <Logo style={ css.logo } />
-                    <Typography type='display3'>Project Tracker</Typography>
-                </div>
-                <Tabs style={ css.headerLine3 } value={ selectedTab }>
-                    <Tab onClick={ () => this.redirect('/', 0) } label='Home' />
-                    <Tab onClick={ () => this.redirect('/project', 1) } label='Projects' />
-                    <Tab onClick={ () => this.redirect('/task', 2) } label='Tasks' />
-                    <Tab onClick={ () => this.redirect('/user', 3) } label='Users' />
-                </Tabs>
             </AppBar>
         )
     }

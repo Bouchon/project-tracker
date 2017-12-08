@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import Hidden from 'material-ui/Hidden'
 
 import Header from './Header'
 import AppRoutes from './AppRoutes'
@@ -56,7 +57,14 @@ class App extends Component {
             <Header
                 login={ login }
                 onLogout={ () => this.handleLogout() } />
-            <AppRoutes history={ history } />
+            <Hidden mdUp>
+                <AppRoutes history={ history } />
+            </Hidden>
+            <Hidden mdDown>
+                <div style={{ paddingLeft: '200px' }}>
+                    <AppRoutes history={ history } />
+                </div>
+            </Hidden>
         </div>
     )
   }
