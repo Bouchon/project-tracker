@@ -48,7 +48,7 @@ class CreateProjectScreen extends Component {
             project.id = data.createProject.id
             project.author = login
             addProject(project)
-            redirect('/project')
+            redirect('/projects/users/me')
         }) 
         .catch(error => {
             console.error(error)

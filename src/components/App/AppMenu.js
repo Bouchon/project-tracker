@@ -23,24 +23,6 @@ const css = {
     itemSelected: { fontWeight: 'bold', textDecoration: 'underline' }
 }
 
-const menu = [
-    { label: 'Home', children: [
-        { label: 'Home',            href: '/' }
-    ] },
-    { label: 'Projects', children: [ 
-        { label: 'My projects',     href: '/projects/users/me' },   
-        { label: 'All projects',    href: '/projects/users/all' }
-    ] },
-    { label: 'Tasks', children: [
-        { label: 'My tasks',        href: '/tasks/users/me' },
-        { label: 'All tasks',       href: '/tasks/users/all'}
-    ] },
-    { label: 'Profiles', children: [ 
-        { label: 'My profile',      href: '/users/me' },
-        { label: 'All profiles',    href: '/users/all' }
-    ] }   
-]
-
 class AppMenu extends Component {
     state = { currentHref: window.location.pathname }
     redirect (href) {
@@ -49,6 +31,7 @@ class AppMenu extends Component {
     }
 
     render () {
+        const { menu } = this.props
         const { currentHref } = this.state
         return (
             <div style={ css.container }>

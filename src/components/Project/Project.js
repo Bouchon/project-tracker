@@ -11,7 +11,7 @@ import MoreHorizIcon from 'material-ui-icons/MoreHoriz'
 
 const css = {
     paper: {
-        margin: '15px',
+        margin: '15px 0',
         padding: '15px',
         display: 'flex',
         alignItems: 'center',

@@ -32,6 +32,7 @@ class ProjectScreen extends Component {
         }
     }
     render () {
+        console.log(this.props.match)
         const { login, project, allProjectsQuery } = this.props
         let allProjects = []
         if (allProjectsQuery.loading === false && allProjectsQuery.allProjects !== undefined) {
@@ -39,15 +40,17 @@ class ProjectScreen extends Component {
         }  
         const myProjects = Object.values(allProjects).filter(p => p.author.id === login.id)
         return (
-            <div style={ css.container }>
-                <Button onClick={ () => this.props.dispatch(push('/project/create')) } fab color='accent' style={ css.fab }><AddIcon /></Button>
-            { allProjects.loading === true && <Typography>Loading...</Typography> }
-            { myProjects.length === 0 && allProjects.loading === false && (
-                <Typography>Use the + button to create a new project!</Typography>
-            )}            
-            { myProjects.map(p => (
-                    <Project key={ p.id } project={ p } />
-            ))}
+            <div style={ css.container }>                
+            { allProjects.loading === true && 
+                <Typography>Loading...</Typography> 
+            }
+            { myProjects.length === 0 && allProjects.loading === false &&
+                <Typography>Use the + button to create a new project!</Typography> 
+            }
+            { myProjects.map(p =>
+                <Project key={ p.id } project={ p } /> 
+            ) }
+                <Button onClick={ () => this.props.dispatch(push('/projects/new')) } raised color='accent'><AddIcon /></Button>
             </div>
         )
     }
