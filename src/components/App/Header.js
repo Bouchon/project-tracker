@@ -34,6 +34,7 @@ const menu = [
     ] },
     { label: 'Profiles', children: [ 
         { label: 'My profile',      href: '/users/me' },
+        { label: 'My relations',    href: '/users/me/relations' },
         { label: 'All profiles',    href: '/users/all' }
     ] }   
 ]
@@ -59,7 +60,6 @@ class Header extends Component {
             'Home' : 
             pathName.split('/')[1].charAt(0).toUpperCase() + pathName.split('/')[1].slice(1)
 
-        console.log(pathName)
         return (
             <AppBar position='static' style={ css.container }>
                 <div style={ css.line }>

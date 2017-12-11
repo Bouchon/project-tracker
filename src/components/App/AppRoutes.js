@@ -6,7 +6,10 @@ import HomeScreen from '../Home/HomeScreen'
 import ProjectScreen from '../Project/ProjectScreen'
 import CreateProjectScreen from '../Project/CreateProjectScreen'
 import TaskScreen from '../Task/TaskScreen'
-import UserScreen from '../User/UserScreen'
+
+/* PROFILE SCREENS */
+import ProfileScreen from '../User/ProfileScreen'
+import ProfileListScreen from '../User/ProfileListScreen'
 
 export default class AppRoutes extends Component {
     render () {
@@ -35,13 +38,15 @@ export default class AppRoutes extends Component {
                         <Route exact path='/tasks/:taskId' component={ TaskScreen } />
                     </Switch>
                     <Switch>
-                        <Switch>
-                            <Route exact path='/users/projects/:projectId' component={ UserScreen } />
-                            <Route exact path='/users/tasks/:taskId' component={ UserScreen } />
-                        </Switch>
-                        <Route exact path='/users/me' component={ UserScreen } />
-                        <Route exact path='/users/all' component={ UserScreen } />
-                        <Route exact path='/users/:userId' component={ UserScreen } />
+                        <Route exact path='/users/me' component={ ProfileScreen } />
+                        <Route exact path='/users/all' component={ ProfileListScreen } />
+                        <Route exact path='/users/:userId' component={ ProfileScreen } />
+
+                        <Route exact path='/users/me/relations' component={ ProfileListScreen } />
+                        <Route exact path='/users/:userId/relations' component={ ProfileListScreen } />
+
+                        <Route exact path='/users/projects/:projectId' component={ ProfileListScreen } />
+                        <Route exact path='/users/tasks/:taskId' component={ ProfileListScreen } />                        
                     </Switch>
                 </div>
             </ConnectedRouter>

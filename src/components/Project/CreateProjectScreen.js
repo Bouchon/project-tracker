@@ -10,7 +10,6 @@ import Button from 'material-ui/Button'
 import TextField from 'material-ui/TextField'
 
 import { addProject } from '../../action-creators/project'
-import UserSelectModal from '../User/UserSelectModal'
 
 const css = {
     container: {
