@@ -20,6 +20,8 @@ import SearchIcon from 'material-ui-icons/Search'
 import Logo from '../../logo.svg'
 import AppMenu from './AppMenu'
 
+import { logIn, logOut } from '../../action-creators/login'
+
 const menu = [
     { label: 'Home', children: [
         { label: 'Home',            href: '/' }
@@ -40,7 +42,7 @@ const menu = [
 ]
 
 const css = {
-    container: { padding: '8px 16px 8px 216px' },
+    container: { padding: '8px 16px 8px 16px' },
     line: { display: 'flex', alignItems: 'center' },
     flexSpace: { flexGrow: 1 }
 }
@@ -48,29 +50,28 @@ const css = {
 class Header extends Component {
     state = { drawerOpen: false, menuOpen: false, anchorEl: null }
 
-    redirect (url, value) {
+    redirect (url) {
         this.props.dispatch(push(url))
     }
 
     render () {
         const { drawerOpen, menuOpen, anchorEl } = this.state
-        const { login, onLogout } = this.props
+        const { permanent, login, onLogout } = this.props
         const pathName = window.location.pathname
         const title = pathName === '/' ? 
             'Home' : 
             pathName.split('/')[1].charAt(0).toUpperCase() + pathName.split('/')[1].slice(1)
-
         return (
             <AppBar position='static' style={ css.container }>
                 <div style={ css.line }>
                     <Hidden mdUp>
                         <Drawer type='temporary' open={ drawerOpen } onRequestClose={ () => this.setState({ drawerOpen: false }) }><AppMenu menu={ menu } /></Drawer>
-                        <IconButton color='inherit' onClick={ () => this.setState({ drawerOpen: true }) }><MenuIcon /></IconButton>
+                            <IconButton color='inherit' onClick={ () => this.setState({ drawerOpen: true }) }><MenuIcon /></IconButton>
                     </Hidden>
-                    <Hidden mdDown>
+                    <Hidden smDown>
                         <Drawer type='permanent' open><AppMenu menu={ menu } /></Drawer>
                     </Hidden>
-                    
+                                        
                     <Typography color='inherit' type='title'>{ title }</Typography>
 
                     <div style={ css.flexSpace }></div>
@@ -79,7 +80,7 @@ class Header extends Component {
 
                     <Menu anchorEl={ anchorEl } open={ menuOpen } onRequestClose={ () => this.setState({ menuOpen: false }) }>
                         <MenuItem disabled>{ login.email }</MenuItem>
-                        <MenuItem>Profile</MenuItem>
+                        <MenuItem onClick={ () => this.redirect('/users/me') }>Profile</MenuItem>
                         <MenuItem onClick={ onLogout }>Log out</MenuItem>
                     </Menu>
                 </div>
@@ -87,5 +88,5 @@ class Header extends Component {
         )
     }
 }
-
-export default connect()(Header)
+const mapStateToProps = ({ login }) => ({ login })
+export default connect(mapStateToProps, { logIn, logOut })(Header)

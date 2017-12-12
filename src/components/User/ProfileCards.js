@@ -26,7 +26,7 @@ const css = {
 }
 
 class ProfileCards extends Component {
-    state = { menuOpen: false, anchorEl: null }
+    state = { menuOpen: false, anchorEl: null, menuUser: null }
 
     getInitials (name) {
         const words = name.split(' ')
@@ -36,21 +36,21 @@ class ProfileCards extends Component {
 
     render () {
         const { users } = this.props
-        const { anchorEl, menuOpen } = this.state
+        const { anchorEl, menuOpen, menuUser } = this.state
         return (
             <div style={ css.container }>
             { users.map(user => (
                 <Paper key={ user.id } style={ css.paper }>
                     <Avatar style={ css.avatar }>{ this.getInitials(user.name) }</Avatar>
                     <Typography>{ user.name }</Typography>
-                    <IconButton onClick={ evt => this.setState({ anchorEl: evt.currentTarget, menuOpen: true }) }><MoreVertIcon /></IconButton>
+                    <IconButton onClick={ evt => this.setState({ anchorEl: evt.currentTarget, menuOpen: true, menuUser: user }) }><MoreVertIcon /></IconButton>
                 </Paper>
             )) }
                 <Menu anchorEl={ anchorEl } open={ menuOpen } onRequestClose={ () => this.setState({ menuOpen: false }) }>
-                    <MenuItem onClick={ () => this.props.dispatch(push('/users/' + user.id)) }>Profile</MenuItem>
-                    <MenuItem onClick={ () => this.props.dispatch(push('/projects/users/' + user.id)) }>Projects</MenuItem>
-                    <MenuItem onClick={ () => this.props.dispatch(push('/tasks/users/' + user.id)) }>Tasks</MenuItem>
-                    <MenuItem onClick={ () => this.props.dispatch(push('/users/' + user.id + '/relations')) }>Relations</MenuItem>
+                    <MenuItem onClick={ () => this.props.dispatch(push('/users/' + menuUser.id)) }>Profile</MenuItem>
+                    <MenuItem onClick={ () => this.props.dispatch(push('/projects/users/' + menuUser.id)) }>Projects</MenuItem>
+                    <MenuItem onClick={ () => this.props.dispatch(push('/tasks/users/' + menuUser.id)) }>Tasks</MenuItem>
+                    <MenuItem onClick={ () => this.props.dispatch(push('/users/' + menuUser.id + '/relations')) }>Relations</MenuItem>
                     <MenuItem>Add relation</MenuItem>
                 </Menu>
             </div>

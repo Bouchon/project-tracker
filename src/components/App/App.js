@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { ConnectedRouter } from 'react-router-redux'
+
 import Hidden from 'material-ui/Hidden'
 
-import Header from './Header'
+
 import AppRoutes from './AppRoutes'
 
 import Login from './Login'
@@ -54,17 +56,14 @@ class App extends Component {
 
     return (
         <div>
-            <Header
-                login={ login }
-                onLogout={ () => this.handleLogout() } />
-            <Hidden mdUp>
-                <AppRoutes history={ history } />
-            </Hidden>
-            <Hidden mdDown>
-                <div style={{ paddingLeft: '200px' }}>
+            <ConnectedRouter history={ history }>
+                <Hidden mdUp>
+                    <AppRoutes mobile history={ history } />
+                </Hidden>
+                <Hidden smDown>
                     <AppRoutes history={ history } />
-                </div>
-            </Hidden>
+                </Hidden>
+            </ConnectedRouter>
         </div>
     )
   }

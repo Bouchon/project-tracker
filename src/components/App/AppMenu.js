@@ -31,7 +31,8 @@ class AppMenu extends Component {
     }
 
     render () {
-        const { menu } = this.props
+        const { menu, match } = this.props
+        console.log(match)
         const { currentHref } = this.state
         return (
             <div style={ css.container }>
