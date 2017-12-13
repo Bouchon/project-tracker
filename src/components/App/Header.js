@@ -65,11 +65,15 @@ class Header extends Component {
             <AppBar position='static' style={ css.container }>
                 <div style={ css.line }>
                     <Hidden mdUp>
-                        <Drawer type='temporary' open={ drawerOpen } onRequestClose={ () => this.setState({ drawerOpen: false }) }><AppMenu menu={ menu } /></Drawer>
-                            <IconButton color='inherit' onClick={ () => this.setState({ drawerOpen: true }) }><MenuIcon /></IconButton>
+                        <Drawer type='temporary' open={ drawerOpen } onRequestClose={ () => this.setState({ drawerOpen: false }) }>
+                            <AppMenu menu={ menu } />
+                        </Drawer>
+                        <IconButton color='inherit' onClick={ () => this.setState({ drawerOpen: true }) }><MenuIcon /></IconButton>
                     </Hidden>
                     <Hidden smDown>
-                        <Drawer type='permanent' open><AppMenu menu={ menu } /></Drawer>
+                        <Drawer type='permanent' open>
+                            <AppMenu menu={ menu } />
+                        </Drawer>
                     </Hidden>
                                         
                     <Typography color='inherit' type='title'>{ title }</Typography>

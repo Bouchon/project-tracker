@@ -55,16 +55,16 @@ class App extends Component {
     }
 
     return (
-        <div>
-            <ConnectedRouter history={ history }>
+        <ConnectedRouter history={ history }>
+            <div>
                 <Hidden mdUp>
                     <AppRoutes mobile history={ history } />
                 </Hidden>
                 <Hidden smDown>
                     <AppRoutes history={ history } />
                 </Hidden>
-            </ConnectedRouter>
-        </div>
+            </div>
+        </ConnectedRouter>
     )
   }
 }

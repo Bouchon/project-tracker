@@ -18,8 +18,8 @@ export default class AppRoutes extends Component {
     render () {
         const { mobile } = this.props
         return (
-            <div>
-                <Route path='/' component={ () => <Header mobile /> } />
+            <div style={ mobile === undefined ? { paddingLeft: '200px' } : null }>
+                <Route path='/' render={ (props) => <Header { ...props } mobile={ mobile } /> } />
                 <Route exact path='/' component={ HomeScreen } />
                 <Switch>
                     <Switch>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+import { withRouter } from 'react-router'
 
 import Typography from 'material-ui/Typography'
 import Divider from 'material-ui/Divider'
@@ -24,16 +25,14 @@ const css = {
 }
 
 class AppMenu extends Component {
-    state = { currentHref: window.location.pathname }
     redirect (href) {
         this.props.dispatch(push(href))
-        this.setState({ currentHref: href })
     }
 
     render () {
-        const { menu, match } = this.props
-        console.log(match)
-        const { currentHref } = this.state
+        const { menu, match, location } = this.props
+        const { pathname } = location
+        console.log(pathname)
         return (
             <div style={ css.container }>
                 <div style={ css.header }>
@@ -47,7 +46,7 @@ class AppMenu extends Component {
                         <ListItem style={ css.groupBlock }><Typography style={ css.groupText }>{ group.label }</Typography></ListItem>
                         <List disablePadding>
                         { group.children.map(item => 
-                            item.href === currentHref ? 
+                            item.href === pathname ? 
                             <ListItem key={ item.label } style={ css.itemBlock } button><Typography style={ css.itemSelected }>{ item.label }</Typography></ListItem>: 
                             <ListItem key={ item.label } style={ css.itemBlock } button onClick={evt => this.redirect(item.href) }><Typography>{ item.label }</Typography></ListItem>
                         ) }
@@ -60,4 +59,4 @@ class AppMenu extends Component {
     }
 }
 
-export default connect()(AppMenu)
+export default connect()(withRouter(AppMenu))

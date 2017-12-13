@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
+import { Link } from 'react-router-dom'
+
 import Typography from 'material-ui/Typography'
 import Avatar from 'material-ui/Avatar'
 import Chip from 'material-ui/Chip'
@@ -20,6 +22,7 @@ const css = {
     },
     chipsContainer: {
         display: 'flex',
+        flexWrap: 'wrap',
         alignItems: 'center',
         margin: '15px 0'
     },
@@ -27,7 +30,7 @@ const css = {
         width: '140px'
     },
     chipItem: {
-        marginRight: '10px'
+        margin: '5px 10px 5px 0'
     }
 }
 class ProfileDashboard extends Component {
@@ -64,7 +67,7 @@ class ProfileDashboard extends Component {
                         <div style={ css.chipsContainer }>
                             <Typography style={ css.chipsLabel } type='subheading'>Created projects </Typography>
                             { user.authorProjects.length === 0 && <Typography type='caption'><i>no project created</i></Typography> }
-                            { user.authorProjects.map(project => <Chip key={ project.id } onClick={ () => {}} style={ css.chipItem } label={ project.name } />) }
+                            { user.authorProjects.map(project => <Link key={ project.id } to={ '/projects/' + project.id }><Chip onClick={ () => {} } style={ css.chipItem } label={ project.name } /></Link>) }
                         </div>
                         <div style={ css.chipsContainer }>
                             <Typography style={ css.chipsLabel } type='subheading'>Member projects </Typography>
@@ -79,7 +82,7 @@ class ProfileDashboard extends Component {
                         <div style={ css.chipsContainer }>
                             <Typography style={ css.chipsLabel } type='subheading'>Created tasks </Typography>
                             { user.assigneeTasks.length === 0 && <Typography type='caption'><i>no task assigned</i></Typography> }
-                            { user.assigneeTasks.map(task => <Chip key={ task.id } onClick={ () => {}} style={ css.chipItem } label={ task.name } />) }
+                            { user.assigneeTasks.map(task => <Chip key={ task.id } style={ css.chipItem } label={ task.name } />) }
                         </div>
                     </div>
             )) }
