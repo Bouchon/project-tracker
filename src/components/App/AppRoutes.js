@@ -6,9 +6,12 @@ import Hidden from 'material-ui/Hidden'
 
 import Header from '../App/Header'
 import HomeScreen from '../Home/HomeScreen'
-import ProjectScreen from '../Project/ProjectScreen'
-import CreateProjectScreen from '../Project/CreateProjectScreen'
 import TaskScreen from '../Task/TaskScreen'
+
+/* PROJECT SCREENS */
+import ProjectScreen from '../Project/ProjectScreen'
+import ProjectListScreen from '../Project/ProjectListScreen'
+import CreateProjectScreen from '../Project/CreateProjectScreen'
 
 /* PROFILE SCREENS */
 import ProfileScreen from '../User/ProfileScreen'
@@ -25,7 +28,7 @@ export default class AppRoutes extends Component {
                     <Switch>
                         <Route exact path='/projects/new' component={ CreateProjectScreen } />
                         <Route exact path='/projects/users/me' component={ ProjectScreen } />
-                        <Route exact path='/projects/users/all' component={ ProjectScreen } />
+                        <Route exact path='/projects/users/all' component={ ProjectListScreen } />
                         <Route exact path='/projects/users/:userId' component={ ProjectScreen } />
                     </Switch>
                     <Route exact path='/projects/:projectId' component={ ProjectScreen } />
