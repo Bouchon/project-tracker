@@ -30,10 +30,11 @@ const css = {
     },
     buttons: {
         padding: '8px',
-        margin: 'auto'
+        margin: 'auto',
     },
     iconButtons: {
-        marginRight: '8px'
+        marginRight: '8px',
+        color: 'rgb(185, 185, 185)'
     },
     moreButton: {
         marginLeft: 'auto'
@@ -55,8 +56,8 @@ export default class ProjectCards extends Component {
                 <Paper key={ project.id } style={ css.paper }>
                     <Avatar style={ css.avatar }>{ this.getInitials(project.author.name) }</Avatar>
                     <Typography style={ css.name } type='title'>{ project.name }</Typography>
-                    <Button color='primary' style={ css.buttons }><WorkIcon style={ css.iconButtons } /> tasks</Button>
-                    <Button color='primary' style={ css.buttons }><SupervisorAccountIcon style={ css.iconButtons } /> members</Button>
+                    <Button style={ css.buttons }><WorkIcon style={ css.iconButtons } /> tasks</Button>
+                    <Button style={ css.buttons }><SupervisorAccountIcon style={ css.iconButtons } /> members</Button>
                     <IconButton style={ css.moreButton }><MoreVertIcon /></IconButton>
                 </Paper>
             )) }
