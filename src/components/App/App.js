@@ -56,14 +56,7 @@ class App extends Component {
 
     return (
         <ConnectedRouter history={ history }>
-            <div>
-                <Hidden mdUp>
-                    <AppRoutes mobile history={ history } />
-                </Hidden>
-                <Hidden smDown>
-                    <AppRoutes history={ history } />
-                </Hidden>
-            </div>
+            <AppRoutes />
         </ConnectedRouter>
     )
   }

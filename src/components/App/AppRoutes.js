@@ -10,7 +10,6 @@ import TaskScreen from '../Task/TaskScreen'
 
 /* PROJECT SCREENS */
 import ProjectScreen from '../Project/ProjectScreen'
-import ProjectListScreen from '../Project/ProjectListScreen'
 import CreateProjectScreen from '../Project/CreateProjectScreen'
 
 /* PROFILE SCREENS */
@@ -19,19 +18,17 @@ import ProfileListScreen from '../User/ProfileListScreen'
 
 export default class AppRoutes extends Component {
     render () {
-        const { mobile } = this.props
         return (
-            <div style={ mobile === undefined ? { paddingLeft: '200px' } : null }>
-                <Route path='/' render={ (props) => <Header { ...props } mobile={ mobile } /> } />
+            <div>
                 <Route exact path='/' component={ HomeScreen } />
                 <Switch>
+                <Route exact path='/projects/:projectId' component={ ProjectScreen } />
                     <Switch>
                         <Route exact path='/projects/new' component={ CreateProjectScreen } />
                         <Route exact path='/projects/users/me' component={ ProjectScreen } />
-                        <Route exact path='/projects/users/all' component={ ProjectListScreen } />
+                        <Route exact path='/projects/users/all' component={ ProjectScreen } />
                         <Route exact path='/projects/users/:userId' component={ ProjectScreen } />
                     </Switch>
-                    <Route exact path='/projects/:projectId' component={ ProjectScreen } />
                 </Switch>
                 <Switch>
                     <Switch>                            

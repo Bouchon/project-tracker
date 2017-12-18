@@ -9,6 +9,7 @@ import IconButton from 'material-ui/IconButton'
 import SupervisorAccountIcon from 'material-ui-icons/SupervisorAccount'
 import WorkIcon from 'material-ui-icons/Work'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
+import AddIcon from 'material-ui-icons/Add'
 
 const css = {
     container: {
@@ -38,10 +39,16 @@ const css = {
     },
     moreButton: {
         marginLeft: 'auto'
+    },
+    addContainer: {
+        display: 'flex',
+        justifyContent: 'center'
     }
 }
 
 export default class ProjectCards extends Component {
+    state = { menuAnchorEl: null, menuOpen: false }
+
     getInitials (name) {
         const words = name.split(' ')
         return words.length === 1 ? 
@@ -49,6 +56,7 @@ export default class ProjectCards extends Component {
     }
 
     render () {
+        const { menuAnchorEl, menuOpen } = this.state
         const { projects } = this.props
         return (
             <div style={ css.container }>
@@ -58,9 +66,13 @@ export default class ProjectCards extends Component {
                     <Typography style={ css.name } type='title'>{ project.name }</Typography>
                     <Button style={ css.buttons }><WorkIcon style={ css.iconButtons } /> tasks</Button>
                     <Button style={ css.buttons }><SupervisorAccountIcon style={ css.iconButtons } /> members</Button>
-                    <IconButton style={ css.moreButton }><MoreVertIcon /></IconButton>
+                    <IconButton style={ css.moreButton } onClick={ evt => this.setState({ menuAnchorEl: evt.currentTarget, menuOpen: true }) }><MoreVertIcon /></IconButton>
                 </Paper>
-            )) }
+            )) }                
+                <Menu anchorEl={ menuAnchorEl } open={ menuOpen } onRequestClose={ () => this.setState({ menuOpen: false }) }>
+                    <MenuItem>Dashboard</MenuItem>
+                    <MenuItem>Delete</MenuItem>
+                </Menu>
             </div>
         )
     }

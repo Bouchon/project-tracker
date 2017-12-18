@@ -8,6 +8,8 @@ import ProjectIcon from '../../resources/project-icon.svg'
 import TaskIcon from '../../resources/task-icon.svg'
 import ChatIcon from '../../resources/chat-icon.svg'
 
+import Header from '../App/Header'
+
 const users = {
     [0]: { id: 0, name: 'Florian Knoblauch', email: 'knoblauch.florian@gmail.com' },
     [1]: { id: 1, name: 'Florian Knoblauch', email: 'knoblauch.florian@gmail.com' },
@@ -35,15 +37,18 @@ class UserScreen extends Component {
     render () {
         console.log(this.props.match.params)
         return (
-            <div style={ css.container }>
-            { Object.values(users).map(user => (
-                <Paper key={ user.id } style={ css.user }>
-                    <Typography type='title'>{ user.name }</Typography>
-                    <IconButton><SvgIcon><ProjectIcon /></SvgIcon></IconButton>
-                    <IconButton><SvgIcon><TaskIcon /></SvgIcon></IconButton>
-                    <IconButton><SvgIcon><ChatIcon /></SvgIcon></IconButton>
-                </Paper>
-            )) }
+            <div>
+                <Header />
+                <div style={ css.container }>
+                { Object.values(users).map(user => (
+                    <Paper key={ user.id } style={ css.user }>
+                        <Typography type='title'>{ user.name }</Typography>
+                        <IconButton><SvgIcon><ProjectIcon /></SvgIcon></IconButton>
+                        <IconButton><SvgIcon><TaskIcon /></SvgIcon></IconButton>
+                        <IconButton><SvgIcon><ChatIcon /></SvgIcon></IconButton>
+                    </Paper>
+                )) }
+                </div>
             </div>
         )
     }

@@ -9,6 +9,8 @@ import Avatar from 'material-ui/Avatar'
 import Chip from 'material-ui/Chip'
 import Button from 'material-ui/Button'
 
+import Header from '../App/Header'
+
 const css = {
     container: {
         width: '100%'

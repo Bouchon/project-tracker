@@ -56,7 +56,7 @@ class Header extends Component {
 
     render () {
         const { drawerOpen, menuOpen, anchorEl } = this.state
-        const { permanent, login, onLogout } = this.props
+        const { permanent, login, onLogout, children } = this.props
         const pathName = window.location.pathname
         const title = pathName === '/' ? 
             'Home' : 
@@ -71,6 +71,7 @@ class Header extends Component {
                         <IconButton color='inherit' onClick={ () => this.setState({ drawerOpen: true }) }><MenuIcon /></IconButton>
                     </Hidden>
                     <Hidden smDown>
+                        <div style={{ marginLeft: '200px' }}></div>
                         <Drawer type='permanent' open>
                             <AppMenu menu={ menu } />
                         </Drawer>
@@ -87,6 +88,10 @@ class Header extends Component {
                         <MenuItem onClick={ () => this.redirect('/users/me') }>Profile</MenuItem>
                         <MenuItem onClick={ onLogout }>Log out</MenuItem>
                     </Menu>
+                </div>
+                <div style={ css.line }>
+                    <Hidden smDown><div style={{ marginLeft: '200px' }}></div></Hidden>
+                    { children }
                 </div>
             </AppBar>
         )

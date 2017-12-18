@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import Hidden from 'material-ui/Hidden'
 import Typography from 'material-ui/Typography'
 
+import Header from '../App/Header'
 import ProfileDashboard from './ProfileDashboard'
 
 const css = {
     container: {
         display: 'flex',
-        flexWrap: 'wrap',
         padding: '0 10vw',
         marginTop: '15px'
     }
@@ -29,8 +30,21 @@ class ProfileScreen extends Component {
         const { userId } = this.state
 
         return (
-            <div style={ css.container }>
-                <ProfileDashboard userId={ userId } />
+            <div>
+                <Header />                
+                
+                <Hidden mdUp>
+                    <div style={ css.container }>
+                        <ProfileDashboard userId={ userId } />
+                    </div>
+                </Hidden>
+
+                <Hidden smDown>
+                    <div style={{ ...css.container, marginLeft: '200px' }}>
+                        <ProfileDashboard userId={ userId } />
+                    </div>
+                </Hidden>
+                
             </div>
         )
     }

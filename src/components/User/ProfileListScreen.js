@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
+import Hidden from 'material-ui/Hidden'
+
+import Header from '../App/Header'
 import ProfileCards from './ProfileCards'
 
 const css = {
@@ -32,8 +35,18 @@ class ProfileListScreen extends Component {
             allUsers = usersQuery.allUsers
         }
         return (
-            <div style={ css.container }>
-                <ProfileCards users={ allUsers } />
+            <div>
+                <Header />
+                <Hidden mdUp>
+                    <div style={ css.container }>
+                        <ProfileCards users={ allUsers } />
+                    </div>
+                </Hidden>
+                <Hidden smDown>
+                    <div style={{ ...css.container, marginLeft: '200px' }}>
+                        <ProfileCards users={ allUsers } />
+                    </div>
+                </Hidden>
             </div>
         )
     }

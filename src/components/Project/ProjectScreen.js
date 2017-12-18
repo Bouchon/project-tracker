@@ -1,79 +1,50 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
-import { push } from 'react-router-redux'
 
-import Typography from 'material-ui/Typography'
-import Button from 'material-ui/Button'
-import AddIcon from 'material-ui-icons/Add'
+import Hidden from 'material-ui/Hidden'
 
-import { updateProject, deleteProject } from '../../action-creators/project'
-import Project from './Project'
+import Header from '../App/Header'
+import { AllProjectsQuery, ProjectByIdQuery, UserProjectsQuery } from './ProjectQuery'
+import ProjectCards from './ProjectCards'
+import ProjectDashboard from './ProjectDashboard'
 
-const css = {
-    container: {
-        position: 'relative',
-        marginTop: '30px',
-        padding: '0 10vw'
-    },
-    fab: {
-        position: 'absolute',
-        top: '-58px',
-        right: '58px'
-    }
-}
+const allProjectsList = <AllProjectsQuery><ProjectCards /></AllProjectsQuery>
+const projectDashboard = projectId => <ProjectByIdQuery projectId={ projectId }><ProjectDashboard /></ProjectByIdQuery>
+const userProjectsList = userId => <UserProjectsQuery userId={ userId }><ProjectCards /></UserProjectsQuery>
 
 class ProjectScreen extends Component {
-    componentWillMount () {
-        const { allProjectsQuery } = this.props
-        if (allProjectsQuery.loading === false) {
-            allProjectsQuery.refetch()
-        }
-    }
+
     render () {
-        console.log(this.props.match)
-        const { login, project, allProjectsQuery } = this.props
-        let allProjects = []
-        if (allProjectsQuery.loading === false && allProjectsQuery.allProjects !== undefined) {
-            allProjects = allProjectsQuery.allProjects
-        }  
-        const myProjects = Object.values(allProjects).filter(p => p.author.id === login.id)
+        const { match, login } = this.props
+        const { projectId, userId } = match.params
+        const allProjects = this.props.match.path.includes('all')
+        const myProjects = this.props.match.path.includes('me')
+        
+        console.log(projectId)
+        const projectComponent = 
+            projectId !== undefined ? projectDashboard(projectId) :
+            userId !== undefined ? userProjectsList(userId) :
+            match.path.includes('/all') === true ? allProjectsList :
+            match.path.includes('/me') === true ? userProjectsList(login.id) : null
+
+
         return (
-            <div style={ css.container }>                
-            { allProjects.loading === true && 
-                <Typography>Loading...</Typography> 
-            }
-            { myProjects.length === 0 && allProjects.loading === false &&
-                <Typography>Use the + button to create a new project!</Typography> 
-            }
-            { myProjects.map(p =>
-                <Project key={ p.id } project={ p } /> 
-            ) }
-                <Button onClick={ () => this.props.dispatch(push('/projects/new')) } raised color='accent'><AddIcon /></Button>
+            <div>
+                <Header />
+                <Hidden mdUp>
+                    { projectComponent }
+                </Hidden>
+                <Hidden smDown>
+                    <div style={{ marginLeft: '200px' }}>
+                        { projectComponent }
+                    </div>
+                </Hidden>
+
             </div>
         )
     }
 }
 
-const ALL_PROJECTS_QUERY = gql`
-query AllProjectsQuery {
-    allProjects {
-        id
-        description
-        name
-        author {
-            id
-            name
-            email
-        }
-    }
-}
-`
+const mapStateToProps = ({ login }) => ({ login })
 
-const mapStateToProps = ({ login, project }) => ({ login, project })
-
-export default 
-    connect(mapStateToProps)
-        (compose(graphql(ALL_PROJECTS_QUERY, { name: 'allProjectsQuery' }))
-    (ProjectScreen))
+export default connect(mapStateToProps)(ProjectScreen)
