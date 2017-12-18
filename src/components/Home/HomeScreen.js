@@ -13,7 +13,7 @@ class HomeScreen extends Component {
     render () {
         return (
             <div>
-                <Header />
+                <Header selected='Home' />
                 <div style={ css.main }>
                     <Typography align='center' type='display2'>Welcome to project tracker!</Typography>
                 </div>

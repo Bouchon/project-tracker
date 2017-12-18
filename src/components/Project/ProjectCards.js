@@ -16,7 +16,7 @@ const css = {
     },
     paper: {
         padding: '15px',
-        margin: '15px',
+        margin: '15px 0',
         display: 'flex',
         alignItems: 'center',
     },
@@ -57,10 +57,10 @@ export default class ProjectCards extends Component {
 
     render () {
         const { menuAnchorEl, menuOpen } = this.state
-        const { projects } = this.props
+        const { projects, textSearch } = this.props
         return (
             <div style={ css.container }>
-            { projects.map(project => (
+            { projects.filter(p => p.name.toLowerCase().includes(textSearch.toLowerCase())).map(project => (
                 <Paper key={ project.id } style={ css.paper }>
                     <Avatar style={ css.avatar }>{ this.getInitials(project.author.name) }</Avatar>
                     <Typography style={ css.name } type='title'>{ project.name }</Typography>

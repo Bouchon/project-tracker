@@ -18,10 +18,9 @@ const css = {
         flexDirection: 'column',
         justifyContent: 'center'
     },
-    groupBlock: { padding: '8px 16px' },
-    groupText: { fontWeight: 'bold' },
-    itemBlock: { padding: '8px 16px 8px 32px' },
-    itemSelected: { fontWeight: 'bold', textDecoration: 'underline' }
+    selected: {
+        textDecoration: 'underline'
+    }
 }
 
 class AppMenu extends Component {
@@ -30,7 +29,7 @@ class AppMenu extends Component {
     }
 
     render () {
-        const { menu, match, location } = this.props
+        const { menu, match, location, selected } = this.props
         const { pathname } = location
         console.log(pathname)
         return (
@@ -41,18 +40,15 @@ class AppMenu extends Component {
                 </div>
                 <Divider />
                 <List>
-                { menu.map(group => (
-                    <div key={ group.label }>
-                        <ListItem style={ css.groupBlock }><Typography style={ css.groupText }>{ group.label }</Typography></ListItem>
-                        <List disablePadding>
-                        { group.children.map(item => 
-                            item.href === pathname ? 
-                            <ListItem key={ item.label } style={ css.itemBlock } button><Typography style={ css.itemSelected }>{ item.label }</Typography></ListItem>: 
-                            <ListItem key={ item.label } style={ css.itemBlock } button onClick={evt => this.redirect(item.href) }><Typography>{ item.label }</Typography></ListItem>
-                        ) }
-                        </List>
-                    </div>
-                )) }
+                { menu.map(item => {
+                    return (
+                        <ListItem key={ item.label } button onClick={ evt => this.redirect(item.href) }>
+                        { item.label === selected ?
+                            <Typography style={ css.selected }>{ item.label }</Typography> :
+                            <Typography>{ item.label }</Typography>
+                        }
+                        </ListItem>
+                    ) }) }
                 </List>
             </div>
         )

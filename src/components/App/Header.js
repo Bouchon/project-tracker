@@ -23,22 +23,10 @@ import AppMenu from './AppMenu'
 import { logIn, logOut } from '../../action-creators/login'
 
 const menu = [
-    { label: 'Home', children: [
-        { label: 'Home',            href: '/' }
-    ] },
-    { label: 'Projects', children: [ 
-        { label: 'My projects',     href: '/projects/users/me' },   
-        { label: 'All projects',    href: '/projects/users/all' }
-    ] },
-    { label: 'Tasks', children: [
-        { label: 'My tasks',        href: '/tasks/users/me' },
-        { label: 'All tasks',       href: '/tasks/users/all'}
-    ] },
-    { label: 'Profiles', children: [ 
-        { label: 'My profile',      href: '/users/me' },
-        { label: 'My relations',    href: '/users/me/relations' },
-        { label: 'All profiles',    href: '/users/all' }
-    ] }   
+    { label: 'Home', href: '/' },
+    { label: 'Projects', href: '/projects/users/me' },
+    { label: 'Tasks', href: '/tasks/users/me' },
+    { label: 'Users', href: '/users/me'}   
 ]
 
 const css = {
@@ -56,24 +44,22 @@ class Header extends Component {
 
     render () {
         const { drawerOpen, menuOpen, anchorEl } = this.state
-        const { permanent, login, onLogout, children } = this.props
-        const pathName = window.location.pathname
-        const title = pathName === '/' ? 
-            'Home' : 
-            pathName.split('/')[1].charAt(0).toUpperCase() + pathName.split('/')[1].slice(1)
+        const { login, logOut, children, selected } = this.props
+        const title = selected
+
         return (
             <AppBar position='static' style={ css.container }>
                 <div style={ css.line }>
                     <Hidden mdUp>
                         <Drawer type='temporary' open={ drawerOpen } onRequestClose={ () => this.setState({ drawerOpen: false }) }>
-                            <AppMenu menu={ menu } />
+                            <AppMenu menu={ menu } selected={ selected } />
                         </Drawer>
                         <IconButton color='inherit' onClick={ () => this.setState({ drawerOpen: true }) }><MenuIcon /></IconButton>
                     </Hidden>
                     <Hidden smDown>
                         <div style={{ marginLeft: '200px' }}></div>
                         <Drawer type='permanent' open>
-                            <AppMenu menu={ menu } />
+                            <AppMenu menu={ menu } selected={ selected } />
                         </Drawer>
                     </Hidden>
                                         
@@ -86,7 +72,7 @@ class Header extends Component {
                     <Menu anchorEl={ anchorEl } open={ menuOpen } onRequestClose={ () => this.setState({ menuOpen: false }) }>
                         <MenuItem disabled>{ login.email }</MenuItem>
                         <MenuItem onClick={ () => this.redirect('/users/me') }>Profile</MenuItem>
-                        <MenuItem onClick={ onLogout }>Log out</MenuItem>
+                        <MenuItem onClick={ logOut }>Log out</MenuItem>
                     </Menu>
                 </div>
                 <div style={ css.line }>

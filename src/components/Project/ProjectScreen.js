@@ -1,45 +1,60 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 
 import Hidden from 'material-ui/Hidden'
+import Tabs, { Tab } from 'material-ui/Tabs'
+import TextField from 'material-ui/TextField'
+import Button from 'material-ui/Button'
+import AddIcon from 'material-ui-icons/Add'
 
 import Header from '../App/Header'
 import { AllProjectsQuery, ProjectByIdQuery, UserProjectsQuery } from './ProjectQuery'
 import ProjectCards from './ProjectCards'
-import ProjectDashboard from './ProjectDashboard'
+import AddOrUpdateProject from './AddOrUpdateProject'
 
-const allProjectsList = <AllProjectsQuery><ProjectCards /></AllProjectsQuery>
-const projectDashboard = projectId => <ProjectByIdQuery projectId={ projectId }><ProjectDashboard /></ProjectByIdQuery>
-const userProjectsList = userId => <UserProjectsQuery userId={ userId }><ProjectCards /></UserProjectsQuery>
+const allProjectsList = textSearch => <AllProjectsQuery><ProjectCards textSearch={ textSearch } /></AllProjectsQuery>
+const userProjectsList = (userId, textSearch) => <UserProjectsQuery userId={ userId }><ProjectCards textSearch={ textSearch } /></UserProjectsQuery>
+
+const css = {
+    addButton: { position: 'absolute', right: '56px', marginTop: '-28px' },
+    projectsContainer: { padding: '30px 10vw' }
+}
 
 class ProjectScreen extends Component {
+    state = { selectedTab: 0, textSearch: '', createDialog: false }
 
     render () {
-        const { match, login } = this.props
-        const { projectId, userId } = match.params
-        const allProjects = this.props.match.path.includes('all')
-        const myProjects = this.props.match.path.includes('me')
-        
-        console.log(projectId)
-        const projectComponent = 
-            projectId !== undefined ? projectDashboard(projectId) :
-            userId !== undefined ? userProjectsList(userId) :
-            match.path.includes('/all') === true ? allProjectsList :
-            match.path.includes('/me') === true ? userProjectsList(login.id) : null
-
+        const { selectedTab, textSearch, createDialog } = this.state
+        const { login } = this.props
+        const projectComponent =
+            selectedTab === 0 ? userProjectsList(login.id, textSearch) :
+            selectedTab === 1 ? allProjectsList(textSearch) : null
 
         return (
             <div>
-                <Header />
+                <Header selected='Projects'>
+                    <Tabs value={ selectedTab } onChange={ (evt, val) => this.setState({ selectedTab: val }) } style={{ margin: '-8px -16px' }}>
+                        <Tab label='My projects' />
+                        <Tab label='All projects' />
+                    </Tabs>
+                </Header>
+                
+                <Button onClick={ () => this.setState({ createDialog: true }) } style={ css.addButton } fab color='accent'><AddIcon /></Button>
+                <AddOrUpdateProject open={ createDialog } onRequestClose={ () => this.setState({ createDialog: false }) } />
+
                 <Hidden mdUp>
-                    { projectComponent }
-                </Hidden>
-                <Hidden smDown>
-                    <div style={{ marginLeft: '200px' }}>
+                    <div style={ css.projectsContainer }>
+                        <TextField placeholder='Search' value={ textSearch } onChange={ evt => this.setState({ textSearch: evt.target.value }) } />
                         { projectComponent }
                     </div>
                 </Hidden>
-
+                <Hidden smDown>
+                    <div style={{ ...css.projectsContainer, marginLeft: '200px' }}>
+                        <TextField placeholder='Search' value={ textSearch } onChange={ evt => this.setState({ textSearch: evt.target.value }) } />
+                        { projectComponent }
+                    </div>
+                </Hidden>
             </div>
         )
     }
