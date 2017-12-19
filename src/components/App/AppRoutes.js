@@ -10,6 +10,7 @@ import TaskScreen from '../Task/TaskScreen'
 
 /* PROJECT SCREENS */
 import ProjectScreen from '../Project/ProjectScreen'
+import ProjectDashboardScreen from '../Project/ProjectDashboardScreen'
 
 /* PROFILE SCREENS */
 import ProfileScreen from '../User/ProfileScreen'
@@ -21,7 +22,7 @@ export default class AppRoutes extends Component {
             <div>
                 <Route exact path='/' component={ HomeScreen } />
                 <Switch>
-                    <Route exact path='/projects/:projectId' component={ ProjectScreen } />
+                    <Route exact path='/projects/:projectId' component={ ProjectDashboardScreen } />
                     <Switch>
                         <Route exact path='/projects/users/me' component={ ProjectScreen } />
                         <Route exact path='/projects/users/all' component={ ProjectScreen } />
