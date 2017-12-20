@@ -14,6 +14,7 @@ import AddIcon from 'material-ui-icons/Add'
 import Header from '../App/Header'
 import ProjectCard from './ProjectCard'
 import AddOrUpdateProject from './AddOrUpdateProject'
+import AddOrUpdateTask from '../Task/AddOrUpdateTask'
 
 const userProjectsList = (userId, textSearch, refetch) => <UserProjectsQuery refetch={ refetch } userId={ userId }><ProjectCards textSearch={ textSearch } /></UserProjectsQuery>
 const allProjectsList = (textSearch, refetch) => <AllProjectsQuery refetch={ refetch }><ProjectCards textSearch={ textSearch } /></AllProjectsQuery>

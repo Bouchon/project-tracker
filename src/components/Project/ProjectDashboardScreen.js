@@ -13,17 +13,20 @@ import Chip from 'material-ui/Chip'
 
 import Header from '../App/Header'
 import UserList from '../User/UserList'
+import TaskList from '../Task/TaskList'
+import AddOrUpdateTask from '../Task/AddOrUpdateTask'
 
 const css = {
     container: { padding: '30px 10vw' },
     authorContainer: { margin: '15px 0', display: 'flex', alignItems: 'center' },
     authorLabel: { marginRight: '15px' },
     membersContainer: { margin: '15px 0', display: 'flex', alignItems: 'center', flexWrap: 'wrap' },
-    membersLabel: { marginRight: '15px' }
+    membersLabel: { marginRight: '15px' },
+    chipItem: { marginRight: '15px' }
 }
 
 class ProjectDashboardScreen extends Component {
-    state = { userDialogOpen: false }
+    state = { userDialogOpen: false, taskDialogOpen: false }
 
     getInitials (name) {
         const words = name.split(' ')
@@ -39,9 +42,16 @@ class ProjectDashboardScreen extends Component {
             )
     }
 
+    onAddTask (task) {
+        console.log(task)
+        const { createTaskMutation } = this.props
+        createTaskMutation({ variables: { name: task.name, description: task.description, projectId: task.projectId, authorId: task.authorId } })
+            .then(() => this.setState({ taskDialogOpen: false }))
+    }
+
     render () {
-        const { projectByIdQuery } = this.props
-        const { userDialogOpen } = this.state        
+        const { login, projectByIdQuery } = this.props
+        const { userDialogOpen, taskDialogOpen } = this.state        
         let dashboard
         if (projectByIdQuery.loading === true) {
             dashboard = <Typography>Loading...</Typography>
@@ -49,7 +59,6 @@ class ProjectDashboardScreen extends Component {
             dashboard = <Typography>Project not found</Typography>
         } else {
             const project = projectByIdQuery.Project
-            console.log(project)
             dashboard = (
                 <div>
                     <div>
@@ -68,13 +77,14 @@ class ProjectDashboardScreen extends Component {
                         <Typography style={ css.membersLabel }>Members</Typography>
                         { project.members.length === 0 ? 
                             <Typography type='caption'>no members</Typography> :
-                            project.members.map(member => {
+                            project.members.map(member => (
                                 <Chip
+                                    style={ css.chipItem }
                                     key={ member.id }
                                     avatar={ <Avatar>{ this.getInitials(member.name) }</Avatar> }
-                                    onClick={ () => { } }
+                                    onClick={ () => { this.props.dispatch(push('/users/' + member.id)) } }
                                     label={ member.name } />
-                        })}
+                        ))}
                         <Button onClick={ () => this.setState({ userDialogOpen: true }) }>Add</Button>
                         <Dialog 
                             open={ userDialogOpen } 
@@ -82,7 +92,17 @@ class ProjectDashboardScreen extends Component {
                             <UserList blackList={ project.members } onSelected={ selection => this.onAddMembers(selection) } />
                         </Dialog>
                     </div>
-                    <Typography>Tasks: no tasks</Typography>
+                    <div style={ css.tasksContainer }>
+                        <Typography>Tasks</Typography>
+                        <Button onClick={ () => this.setState({ taskDialogOpen: true }) } color='primary'>ADD</Button>
+                        <TaskList tasks={ project.tasks } />
+                        <AddOrUpdateTask 
+                            open={ taskDialogOpen } 
+                            authorId={ login.id }
+                            projectId={ project.id }
+                            onRequestClose={ () => this.setState({ taskDialogOpen: false }) }
+                            onCreate={ task => this.onAddTask(task) } />
+                    </div>
                 </div>
             )
         }
@@ -115,6 +135,11 @@ query projectById($projectId: ID!) {
             id
             name
         }
+        tasks {
+            id
+            name
+            description
+        }
     }
 }
 `
@@ -126,8 +151,18 @@ mutation addUsersToPojectMutation($projectId: ID!, $membersIds: [ID!]) {
     }
 }
 `
+const CREATE_TASK_MUTATION = gql`
+mutation createTaskMutation($name: String!, $description: String!, $projectId: ID!, $authorId: ID!) {
+    createTask(name: $name, description: $description, projectId: $projectId, authorId: $authorId) {
+        id
+    }
+}
+`
 
-export default connect()(compose(
+const mapStateToProps = ({ login }) => ({ login })
+
+export default connect(mapStateToProps)(compose(
     graphql(PROJECT_BY_ID_QUERY, { name: 'projectByIdQuery', options: ({ match }) => ({ variables: { projectId: match.params.projectId } }) }),
-    graphql(ADD_MEMBERS_TO_PROJECT_MUTATION, { name: 'addMembersToProjectMutation' }))
+    graphql(ADD_MEMBERS_TO_PROJECT_MUTATION, { name: 'addMembersToProjectMutation' }),
+    graphql(CREATE_TASK_MUTATION, { name: 'createTaskMutation' }))
     (ProjectDashboardScreen))

@@ -12,6 +12,9 @@ import TaskScreen from '../Task/TaskScreen'
 import ProjectScreen from '../Project/ProjectScreen'
 import ProjectDashboardScreen from '../Project/ProjectDashboardScreen'
 
+/* TASKS SCREENS */
+import TaskDashboardScreen from '../Task/TaskDashboardScreen'
+
 /* PROFILE SCREENS */
 import ProfileScreen from '../User/ProfileScreen'
 import ProfileListScreen from '../User/ProfileListScreen'
@@ -30,6 +33,7 @@ export default class AppRoutes extends Component {
                     </Switch>
                 </Switch>
                 <Switch>
+                    <Route exact path='/tasks/:taskId' component={ TaskDashboardScreen } />
                     <Switch>                            
                         <Route exact path='/tasks/users/me' component={ TaskScreen } />
                         <Route exact path='/tasks/users/all' component={ TaskScreen } />
@@ -37,7 +41,6 @@ export default class AppRoutes extends Component {
                         <Route exact path='/tasks/projects/:projectId' component={ TaskScreen } />
                         <Route exact path='/tasks/projects/:projectId/users/:userId' component={ TaskScreen } />
                     </Switch>
-                    <Route exact path='/tasks/:taskId' component={ TaskScreen } />
                 </Switch>
                 <Switch>
                     <Route exact path='/users/me' component={ ProfileScreen } />

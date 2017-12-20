@@ -9,48 +9,50 @@ import Button from 'material-ui/Button'
 import IconButton from 'material-ui/IconButton'
 import CloseIcon from 'material-ui-icons/Close'
 
+const DEFAULT_TASK = {
+    name: '',
+    description: '',
+    authorId: null,
+    projectId: null
+}
+
 const css = {
     header: { position: 'relative' },
     headerTitle: { marginRight: 'auto' },
-    body: { 
+    body: {
         padding: '24px',
         display: 'flex',
         flexDirection: 'column'
     }
 }
-const DEFAULT_PROJECT = {
-    name: '',
-    description: '',
-    authorId: null
-}
 
-export default class AddOrUpdateProject extends Component {
-    state = { project: null }
+export default class AddOrUpdateTask extends Component {
+    state = { task: null }
 
     componentWillMount () {
-        const { project, authorId } = this.props
-        const p = project === undefined ? { ...DEFAULT_PROJECT, authorId } : project
-        this.setState({ project: p })
+        const { task, authorId, projectId } = this.props
+        const t = task === undefined ? { ...DEFAULT_TASK, authorId, projectId } : task
+        this.setState({ task: t })
     }
 
     render () {
-        const { project } = this.state
+        const { task } = this.state
         const { open, onRequestClose, onCreate } = this.props
         return (
             <Dialog fullScreen open={ open } onRequestClose={ onRequestClose }>
                 <AppBar style={ css.header }>
                     <Toolbar>
-                        <Typography style={ css.headerTitle } type='title' color='inherit'>New Project</Typography>
+                        <Typography style={ css.headerTitle } type='title' color='inherit'>New Task</Typography>
                         <IconButton color='inherit' onClick={ onRequestClose }><CloseIcon /></IconButton>
                     </Toolbar>
                 </AppBar>
                 <div style={ css.body }>
-                    <TextField label='Project name' value={ project.name } onChange={ evt => this.setState({ project: { ...project, name: evt.target.value } }) } />
-                    <TextField label='Project description' value={ project.description } onChange={ evt => this.setState({ project: { ...project, description: evt.target.value } }) } />
-                </div>
-                <div>
-                    <Button color='primary' onClick={ onRequestClose }>Cancel</Button>
-                    <Button raised color='accent' onClick={ () => onCreate(this.state.project) }>Create</Button>
+                    <TextField label='Task name' value={ task.name } onChange={ evt => this.setState({ task: { ...task, name: evt.target.value } }) } />
+                    <TextField label='Task description' value={ task.description } onChange={ evt => this.setState({ task: { ...task, description: evt.target.value } }) } />
+                    <div>
+                        <Button color='primary'>Cancel</Button>
+                        <Button raised color='accent' onClick={ () => onCreate(task) }>Create</Button>
+                    </div>
                 </div>
             </Dialog>
         )
