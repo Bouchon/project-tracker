@@ -7,19 +7,20 @@ import Toolbar from 'material-ui/Toolbar'
 import Chip from 'material-ui/Chip'
 import Typography from 'material-ui/Typography'
 import TextField from 'material-ui/TextField'
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input'
-import { FormControl } from 'material-ui/Form'
 import Button from 'material-ui/Button'
 import IconButton from 'material-ui/IconButton'
 import CloseIcon from 'material-ui-icons/Close'
 import DateRangeIcon from 'material-ui-icons/DateRange'
 
 import SelectUserList from '../User/SelectUserList'
+import DatePicker from '../Date/DatePicker'
 
 const DEFAULT_PROJECT = {
     name: '',
     description: '',
-    authorId: null
+    authorId: null,
+    startDate: '',
+    endDate: ''
 }
 const css = {
     header: { position: 'relative' },
@@ -34,6 +35,11 @@ const css = {
         width: '50%',
         flexDirection: 'column',
         marginRight: '30px'
+    },
+    datePickerContainer: {
+        padding: '15px',
+        display: 'flex',
+        justifyContent: 'space-around'
     },
     rightPanel: {
         width: 'calc(50% - 90px)',
@@ -73,13 +79,10 @@ export default class AddOrUpdateProject extends Component {
                         <Chip label={ login.name } />
                         <TextField label='Project name' value={ project.name } onChange={ evt => this.setState({ project: { ...project, name: evt.target.value } }) } />
                         <TextField multiline rows={ 5 } label='Project description' value={ project.description } onChange={ evt => this.setState({ project: { ...project, description: evt.target.value } }) } />
-                        
-                        <FormControl>
-                            <InputLabel>Start date</InputLabel>
-                            <Input value='' startAdornment={ <InputAdornment position='start'><IconButton><DateRangeIcon /></IconButton></InputAdornment> } />
-                        </FormControl>
-                        
-                        <Button><DateRangeIcon /> End</Button>
+                        <div style={ css.datePickerContainer }>
+                            <DatePicker value={ project.startDate } label='Start date' onChange={ date => this.setState({ project: { ...project, startDate: date } }) } />
+                            <DatePicker value={ project.endDate } label='End date' onChange={ date => this.setState({ project: { ...project, endDate: date } }) } />
+                        </div>
                     </div>
                     <Paper style={ css.rightPanel }>
                         <Typography>Memers</Typography>

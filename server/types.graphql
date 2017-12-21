@@ -17,6 +17,8 @@ type Project @model {
   updatedAt: DateTime!
   name: String!
   description: String!
+  startDate: DateTime
+  endDate: DateTime
   author: User! @relation(name: "ProjectAuthor")
   tasks: [Task!]! @relation(name: "ProjectTasks")
   members: [User!]! @relation(name: "ProjectMembers")
@@ -30,6 +32,8 @@ type Task @model {
   name: String!
   description: String!
   state: String
+  startDate: DateTime
+  endDate: DateTime
   project: Project! @relation(name: "ProjectTasks")
   author: User! @relation(name: "TaskAuthor")
   assignees: [User!]! @relation(name: "TaskAssignees")

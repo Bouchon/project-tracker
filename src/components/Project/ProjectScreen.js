@@ -178,8 +178,8 @@ query allUsersQuery {
 
 
 const CREATE_PROJECT_MUTATION = gql`
-mutation createProjectMutation($name: String!, $description: String!, $authorId: ID, $membersIds: [ID!]) {
-    createProject(name: $name, description: $description, authorId: $authorId, membersIds: $membersIds) {
+mutation createProjectMutation($name: String!, $description: String!, $startDate: DateTime, $endDate: DateTime, $authorId: ID, $membersIds: [ID!]) {
+    createProject(name: $name, description: $description, startDate: $startDate, endDate: $endDate, authorId: $authorId, membersIds: $membersIds) {
         id
     }
 }

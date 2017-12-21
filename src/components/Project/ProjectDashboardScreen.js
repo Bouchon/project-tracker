@@ -74,6 +74,10 @@ class ProjectDashboardScreen extends Component {
                         <Typography>{ project.description }</Typography>
                     </div>
                     <div style={ css.authorContainer }>
+                        <Typography>From { project.startDate === null ? 'N/A' : project.startDate.toString() } </Typography>
+                        <Typography> - To { project.endDate === null ? 'N/A' : project.endDate.toString() } </Typography>
+                    </div>
+                    <div style={ css.authorContainer }>
                         <Typography style={ css.authorLabel }>Author</Typography>
                         <Chip 
                             avatar={ <Avatar>{ this.getInitials(project.author.name) }</Avatar> } 
@@ -140,6 +144,8 @@ query projectById($projectId: ID!) {
         id
         name
         description
+        startDate
+        endDate
         author {
             id
             name
