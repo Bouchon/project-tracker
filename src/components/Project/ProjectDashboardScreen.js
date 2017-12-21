@@ -12,6 +12,7 @@ import Button from 'material-ui/Button'
 import Chip from 'material-ui/Chip'
 
 import Header from '../App/Header'
+import SelectUserDialog from '../User/SelectUserDialog'
 import UserList from '../User/UserList'
 import TaskList from '../Task/TaskList'
 import AddOrUpdateTask from '../Task/AddOrUpdateTask'
@@ -34,12 +35,11 @@ class ProjectDashboardScreen extends Component {
         words[0][0].toUpperCase() : words[0][0].toUpperCase() + words[1][0].toUpperCase()
     }
 
-    onAddMembers (selection) {
-        const { match, addMembersToProjectMutation } = this.props
+    updateProjectMembers (selection) {
+        const { match, projectByIdQuery, addMembersToProjectMutation } = this.props
         addMembersToProjectMutation({ variables: { projectId: match.params.projectId, membersIds: selection } })
-            .then(() =>
-                this.setState({ userDialogOpen: false })
-            )
+            .then(() => projectByIdQuery.refetch()
+                .then(() => this.setState({ userDialogOpen: false })))
     }
 
     onAddTask (task) {
@@ -50,8 +50,15 @@ class ProjectDashboardScreen extends Component {
     }
 
     render () {
-        const { login, projectByIdQuery } = this.props
-        const { userDialogOpen, taskDialogOpen } = this.state        
+        const { login, projectByIdQuery, allUsersQuery } = this.props
+        const { userDialogOpen, taskDialogOpen } = this.state 
+        const allUsers =
+            allUsersQuery.allUsers === undefined ? [] :
+            allUsersQuery.allUsers === null ? [] :
+            allUsersQuery.allUsers
+        
+        console.log(allUsersQuery)
+
         let dashboard
         if (projectByIdQuery.loading === true) {
             dashboard = <Typography>Loading...</Typography>
@@ -86,11 +93,17 @@ class ProjectDashboardScreen extends Component {
                                     label={ member.name } />
                         ))}
                         <Button onClick={ () => this.setState({ userDialogOpen: true }) }>Add</Button>
-                        <Dialog 
+                        <SelectUserDialog
+                            users={ allUsers }
+                            selection={ project.members.map(m => m.id) }
+                            open={ userDialogOpen }
+                            onRequestClose={ () => this.setState({ userDialogOpen: false }) }
+                            onConfirmSelection={ selection => this.updateProjectMembers(selection) } />
+                        {/* <Dialog 
                             open={ userDialogOpen } 
                             onRequestClose={ () => this.setState({ userDialogOpen: false }) }>
                             <UserList blackList={ project.members } onSelected={ selection => this.onAddMembers(selection) } />
-                        </Dialog>
+                        </Dialog> */}
                     </div>
                     <div style={ css.tasksContainer }>
                         <Typography>Tasks</Typography>
@@ -144,6 +157,15 @@ query projectById($projectId: ID!) {
 }
 `
 
+const ALL_USERS_QUERY = gql`
+query allUsersQuery {
+    allUsers {
+        id
+        name
+    }
+}
+`
+
 const ADD_MEMBERS_TO_PROJECT_MUTATION = gql`
 mutation addUsersToPojectMutation($projectId: ID!, $membersIds: [ID!]) {
     updateProject(id: $projectId, membersIds: $membersIds) {
@@ -163,6 +185,7 @@ const mapStateToProps = ({ login }) => ({ login })
 
 export default connect(mapStateToProps)(compose(
     graphql(PROJECT_BY_ID_QUERY, { name: 'projectByIdQuery', options: ({ match }) => ({ variables: { projectId: match.params.projectId } }) }),
+    graphql(ALL_USERS_QUERY, { name: 'allUsersQuery' }),
     graphql(ADD_MEMBERS_TO_PROJECT_MUTATION, { name: 'addMembersToProjectMutation' }),
     graphql(CREATE_TASK_MUTATION, { name: 'createTaskMutation' }))
     (ProjectDashboardScreen))

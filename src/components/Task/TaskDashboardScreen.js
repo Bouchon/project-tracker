@@ -22,7 +22,6 @@ class TaskDashboardScreen extends Component {
 
     updateTaskAssignees (assigneesIds) {
         const { match, addAssigneesToTaskMutation, taskByIdQuery } = this.props
-        console.log(match.params.taskId, assigneesIds)
         addAssigneesToTaskMutation({ variables: { taskId: match.params.taskId, assigneesIds: assigneesIds } })
             .then(() => taskByIdQuery.refetch()
                 .then(() => this.setState({ userDialogOpen: false })))
