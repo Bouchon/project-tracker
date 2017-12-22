@@ -54,6 +54,9 @@ class TaskDashboardScreen extends Component {
                     <br />
                     <Typography>{ task.description }</Typography>
                     <Typography>State: { task.state }</Typography>
+                    <div>
+                        <Typography>From { task.startDate === null ? 'N/A' : task.startDate.toString() } - To { task.endDate === null ? 'N/A' : task.endDate.toString() } </Typography>
+                    </div>
                     <Typography>Assignees:</Typography>
                     { task.assignees.map(assignee => (
                         <Chip key={ assignee.id } label={assignee.name } />
@@ -90,6 +93,8 @@ query taskByIdQuery($taskId: ID!) {
         name
         description
         state
+        startDate
+        endDate
         author {
             id
             name

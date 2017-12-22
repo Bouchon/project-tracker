@@ -1,49 +1,72 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
+import { push } from 'react-router-redux'
 
-import Paper from 'material-ui/Paper'
 import Typography from 'material-ui/Typography';
 
-
-const tasks = {
-    [0]: { id: 0, name: 'Task name', description: 'Task description'},
-    [1]: { id: 1, name: 'Task name', description: 'Task description' },
-    [2]: { id: 2, name: 'Task name', description: 'Task description' }
-}
-const projects = {
-    [0]: { id: 0, name: 'Project name', tasks: tasks },
-    [1]: { id: 1, name: 'Project name', tasks: tasks },
-    [2]: { id: 2, name: 'Project name', tasks: tasks }
-}
-
 const css = {
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        padding: '0 10vw'
-    },
-    project: {
-        margin: '15px',
-        padding: '15px'
+
+}
+
+class TaskScreen extends Component {
+    state = { selectedTab: 0, textSearch: '' }
+
+    getTasks (selectedTab) {
+        const { userTasksQuery, allTasksQuery, login } = this.props
+        switch (selectedTab) {
+            case 0: return { loading: userTasksQuery.loading, tasks: userTasksQuery.allTasks }
+            case 1: return { loading: allTasksQuery.loading, tasks: allTasksQuery.allTasks }
+        }
+    }
+
+    render () {
+        const { selectedTab, textSearch } = this.state
+        const { login, allTasksQuery } = this.props
+        const { loading, tasks } = this.getTasks(selectedTab)
+        
+        const taskList =
+            loading === true ? <Typography>Loading...</Typography> :
+            tasks.length === 0 ? <Typography>No tasks found from search '{ textSearch }'</Typography> :
+            (
+                <div>
+                    
+                </div>
+            )
     }
 }
 
-export default class TaskScreen extends Component {
-    render () {
-        console.log(this.props.match.params)
-        return (
-            <div style={ css.container }>
-            { Object.values(projects).map(project => (
-                <Paper key={ project.id } style={ css.project }>
-                    <Typography type='title'>{ project.name }</Typography>
-                    { Object.values(project.tasks).map(task => (
-                        <div key={ task.id }>
-                            <Typography>{ task.name }</Typography>
-                        </div>
-                    )) }
-                </Paper>
-            )) }
-            </div>
-        )
+const USER_TASKS_QUERY = gql`
+query userTasksQuery($userId: ID!) {
+    allTasks(filter: { assignees: { id: $userId }}) {
+        id
+        name
+        author
+        description
+        state
+        startDate
+        endDate
     }
 }
+`
+
+const ALL_TASKS_QUERY = gql`
+query allTasksQuery {
+    allTasks {
+        id
+        name
+        author
+        description
+        state
+        startDate
+        endDate
+    }
+}
+`
+
+const mapStateToProps = ({ login }) => ({ login })
+export default connect(mapStateToProps)(compose(
+    graphql(USER_TASKS_QUERY, { name: 'userTasksQuery', options: ({ login }) => ({ variables: { userId: login.id } }) }),
+    graphql(ALL_TASKS_QUERY, { name: 'allTasksQuery' }))
+    (TaskScreen))

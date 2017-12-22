@@ -9,11 +9,16 @@ import Button from 'material-ui/Button'
 import IconButton from 'material-ui/IconButton'
 import CloseIcon from 'material-ui-icons/Close'
 
+import DatePicker from '../Date/DatePicker'
+
 const DEFAULT_TASK = {
     name: '',
     description: '',
     authorId: null,
-    projectId: null
+    projectId: null,
+    state: 'new',
+    startDate: '',
+    endDate: ''
 }
 
 const css = {
@@ -49,8 +54,10 @@ export default class AddOrUpdateTask extends Component {
                 <div style={ css.body }>
                     <TextField label='Task name' value={ task.name } onChange={ evt => this.setState({ task: { ...task, name: evt.target.value } }) } />
                     <TextField label='Task description' value={ task.description } onChange={ evt => this.setState({ task: { ...task, description: evt.target.value } }) } />
+                    <DatePicker label='Start date' value={ task.startDate } onChange={ date => this.setState({ task: { ...task, startDate: date } })} />
+                    <DatePicker label='End date' value={ task.endDate } onChange={ date => this.setState({ task: { ...task, endDate: date } }) } />
                     <div>
-                        <Button color='primary'>Cancel</Button>
+                        <Button color='primary' onClick={ onRequestClose }>Cancel</Button>
                         <Button raised color='accent' onClick={ () => onCreate(task) }>Create</Button>
                     </div>
                 </div>

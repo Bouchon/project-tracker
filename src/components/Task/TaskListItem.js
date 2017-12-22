@@ -9,7 +9,7 @@ export default class TaskListItem extends Component {
         const { task, onTaskDashboard } = this.props
         return (
             <ListItem button onClick={ onTaskDashboard }>
-                <Chip label='TODO' />
+                <Chip label={ task.state } />
                 <ListItemText primary={ task.name } secondary={ '#' + task.id } />
             </ListItem>
         )

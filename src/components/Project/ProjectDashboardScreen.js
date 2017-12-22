@@ -45,7 +45,7 @@ class ProjectDashboardScreen extends Component {
     onAddTask (task) {
         console.log(task)
         const { createTaskMutation } = this.props
-        createTaskMutation({ variables: { name: task.name, description: task.description, projectId: task.projectId, authorId: task.authorId } })
+        createTaskMutation({ variables: task })
             .then(() => this.setState({ taskDialogOpen: false }))
     }
 
@@ -72,10 +72,7 @@ class ProjectDashboardScreen extends Component {
                         <Typography type='title'>{ project.name }</Typography>
                         <Typography type='caption'>#{ project.id }</Typography>
                         <Typography>{ project.description }</Typography>
-                    </div>
-                    <div style={ css.authorContainer }>
-                        <Typography>From { project.startDate === null ? 'N/A' : project.startDate.toString() } </Typography>
-                        <Typography> - To { project.endDate === null ? 'N/A' : project.endDate.toString() } </Typography>
+                        <Typography>From { project.startDate === null ? 'N/A' : project.startDate.toString() } - To { project.endDate === null ? 'N/A' : project.endDate.toString() } </Typography>
                     </div>
                     <div style={ css.authorContainer }>
                         <Typography style={ css.authorLabel }>Author</Typography>
@@ -103,11 +100,6 @@ class ProjectDashboardScreen extends Component {
                             open={ userDialogOpen }
                             onRequestClose={ () => this.setState({ userDialogOpen: false }) }
                             onConfirmSelection={ selection => this.updateProjectMembers(selection) } />
-                        {/* <Dialog 
-                            open={ userDialogOpen } 
-                            onRequestClose={ () => this.setState({ userDialogOpen: false }) }>
-                            <UserList blackList={ project.members } onSelected={ selection => this.onAddMembers(selection) } />
-                        </Dialog> */}
                     </div>
                     <div style={ css.tasksContainer }>
                         <Typography>Tasks</Typography>
@@ -158,6 +150,7 @@ query projectById($projectId: ID!) {
             id
             name
             description
+            state
         }
     }
 }
@@ -180,8 +173,8 @@ mutation addUsersToPojectMutation($projectId: ID!, $membersIds: [ID!]) {
 }
 `
 const CREATE_TASK_MUTATION = gql`
-mutation createTaskMutation($name: String!, $description: String!, $projectId: ID!, $authorId: ID!) {
-    createTask(name: $name, description: $description, projectId: $projectId, authorId: $authorId) {
+mutation createTaskMutation($name: String!, $description: String!, $projectId: ID!, $authorId: ID!, $state: String, $startDate: DateTime, $endDate: DateTime) {
+    createTask(name: $name, description: $description, projectId: $projectId, authorId: $authorId, state: $state, startDate: $startDate, endDate: $endDate) {
         id
     }
 }
