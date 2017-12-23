@@ -28,7 +28,7 @@ const css = {
 }
 
 class ProjectScreen extends Component {
-    state = { selectedTab: 0, textSearch: '', createDialog: false, refetch: false, deleteDialog: false, deleteId: null }
+    state = { selectedTab: 0, textSearch: '', createDialog: false, refetch: false, deleteDialog: false, deleteProject: null }
 
     createProject (project) {
         this.props.createProjectMutation({ variables: project })
@@ -41,16 +41,23 @@ class ProjectScreen extends Component {
                 this.setState({ createDialog: false })
             })
     }
-    deleteProject (id) {
-        const { deleteProjectMutation, allProjectsQuery, userProjectsQuery } = this.props
-        deleteProjectMutation({ variables: { id } })
+    
+    async deleteProject (project) {
+        const { deleteProjectMutation, allProjectsQuery, userProjectsQuery, deleteTaskMutation } = this.props
+
+        await project.tasks.map(t => {
+            deleteTaskMutation({ variables: { id: t.id } })
+        })
+
+        deleteProjectMutation({ variables: { id: project.id } })
             .then(() => allProjectsQuery.refetch()
-                .then(() => {                
-                    allProjectsQuery.refetch()
-                    this.setState({ deleteDialog: false })
-                } )
+                .then(() => userProjectsQuery.refetch()
+                    .then(() => this.setState({ deleteDialog: false })
+                )
             )
+        )
     }
+
     getProjects (selectedTab) {
         const { userProjectsQuery, allProjectsQuery, login } = this.props
         switch (selectedTab) {
@@ -60,7 +67,7 @@ class ProjectScreen extends Component {
     }
 
     render () {
-        const { selectedTab, textSearch, createDialog, refetch, deleteDialog, deleteId } = this.state
+        const { selectedTab, textSearch, createDialog, refetch, deleteDialog, deleteProject } = this.state
         const { login, allUsersQuery } = this.props
         const { loading, projects } = this.getProjects(selectedTab)
 
@@ -88,14 +95,14 @@ class ProjectScreen extends Component {
                             deletable={ project.author.id === login.id }
                             onAuthorProfile={ () => this.props.dispatch(push('/users/' + project.author.id)) }
                             onDashboard={ () => this.props.dispatch(push('/projects/' + project.id)) }
-                            onDelete={ evt => { evt.stopPropagation(); this.setState({ deleteDialog: true, deleteId: project.id }) } } />
+                            onDelete={ evt => { evt.stopPropagation(); this.setState({ deleteDialog: true, deleteProject: project }) } } />
                     )) }
                         <ConfirmDialog 
                             open={ deleteDialog } 
                             onRequestClose={ () => this.setState({ deleteDialog: false }) }
-                            onConfirm={ () => this.deleteProject(deleteId) }
+                            onConfirm={ () => this.deleteProject(deleteProject) }
                             title='Delete project ?'
-                            message='The project will be deleted permanently' />
+                            message='The project and all its tasks will be deleted permanently' />
                     </div>
                 )
             }
@@ -148,6 +155,9 @@ query allProjectsQuery {
             id
             name
         }
+        tasks {
+            id
+        }
     }
 }
 `
@@ -162,6 +172,9 @@ query userProjectsQuery($userId: ID!) {
         author {
             id
             name
+        }
+        tasks {
+            id
         }
     }
 }
@@ -193,7 +206,13 @@ mutation deleteProjectMutation($id: ID!) {
 }
 `
 
-
+const DELETE_TASK_MUTATION = gql`
+mutation deleteTaskMutation($id: ID!) {
+    deleteTask(id: $id) {
+        id
+    }
+}
+`
 
 const mapStateToProps = ({ login }) => ({ login })
 
@@ -202,5 +221,6 @@ export default connect(mapStateToProps)(compose(
     graphql(ALL_USERS_QUERY, { name: 'allUsersQuery' }),
     graphql(USER_PROJECTS_QUERY, { name: 'userProjectsQuery', options: ({ login }) => ({ variables: { userId: login.id } }) }),
     graphql(CREATE_PROJECT_MUTATION, { name: 'createProjectMutation' }),
-    graphql(DELETE_PROJECT_MUTATION, { name: 'deleteProjectMutation' }))
+    graphql(DELETE_PROJECT_MUTATION, { name: 'deleteProjectMutation' }),
+    graphql(DELETE_TASK_MUTATION, { name: 'deleteTaskMutation' }))
     (ProjectScreen))
