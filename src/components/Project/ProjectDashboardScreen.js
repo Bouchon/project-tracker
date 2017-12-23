@@ -43,10 +43,13 @@ class ProjectDashboardScreen extends Component {
     }
 
     onAddTask (task) {
-        console.log(task)
-        const { createTaskMutation } = this.props
-        createTaskMutation({ variables: task })
-            .then(() => this.setState({ taskDialogOpen: false }))
+        const { createTaskMutation, projectByIdQuery } = this.props        
+        const startDate = task.startDate === '' ? null : task.startDate
+        const endDate = task.endDate === '' ? null : task.endDate
+        createTaskMutation({ variables: { ...task, startDate, endDate } })
+            .then(() => projectByIdQuery.refetch()
+                .then(() => this.setState({ taskDialogOpen: false }))
+            )
     }
 
     render () {
@@ -56,8 +59,6 @@ class ProjectDashboardScreen extends Component {
             allUsersQuery.allUsers === undefined ? [] :
             allUsersQuery.allUsers === null ? [] :
             allUsersQuery.allUsers
-        
-        console.log(allUsersQuery)
 
         let dashboard
         if (projectByIdQuery.loading === true) {
@@ -151,6 +152,9 @@ query projectById($projectId: ID!) {
             name
             description
             state
+            author {
+                id
+            }
         }
     }
 }

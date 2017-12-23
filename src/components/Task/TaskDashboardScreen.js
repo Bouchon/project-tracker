@@ -42,7 +42,6 @@ class TaskDashboardScreen extends Component {
             dashboard = <Typography>Task not found</Typography>
         } else {
             const task = taskByIdQuery.Task
-            console.log(task)
             dashboard = (
                 <div>
                     <Button onClick={ () => this.props.dispatch(push('/projects/' + task.project.id)) }>

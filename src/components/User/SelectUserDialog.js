@@ -12,19 +12,26 @@ const css = {
 }
 
 export default class SelectUserDialog extends Component {
+    state = { currentSelection: null }
+
+    componentWillMount () {
+        this.setState({ currentSelection: this.props.selection })
+    }
 
     render () {
         const { users, selection, open, onRequestClose, onConfirmSelection } = this.props
+        const { currentSelection } = this.state
 
         return (
             <Dialog open={ open } onRequestClose={ onRequestClose }>
                 <div style={ css.container }>
                     <SelectUserList
                         users={ users }
-                        selection={ selection } />                    
+                        selection={ selection }
+                        onChange={ selection => this.setState({ currentSelection: selection }) } />                    
                     <div style={ css.actionsContainer }>
                         <Button onClick={ onRequestClose } color='primary'>Cancel</Button>
-                        <Button onClick={ () => onConfirmSelection(selection) } color='accent' raised>Confirm</Button>
+                        <Button onClick={ () => onConfirmSelection(currentSelection) } color='accent' raised>Confirm</Button>
                     </div>
                 </div>
             </Dialog>

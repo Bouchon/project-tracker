@@ -4,16 +4,11 @@ import { ConnectedRouter } from 'react-router-redux'
 
 import Hidden from 'material-ui/Hidden'
 
-
 import AppRoutes from './AppRoutes'
-
 import Login from './Login'
 import HomeScreen from '../Home/HomeScreen'
 import ProjectScreen from '../Project/ProjectScreen'
 import TaskScreen from '../Task/TaskScreen'
-
-import CreateLink from '../Tuto/CreateLink'
-import LinkList from '../Tuto/LinkList'
 
 import { logIn, logOut } from '../../action-creators/login'
 
