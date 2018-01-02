@@ -26,6 +26,11 @@ class TaskDashboardScreen extends Component {
             .then(() => taskByIdQuery.refetch()
                 .then(() => this.setState({ userDialogOpen: false })))
     }
+    updateTaskState (state) {
+        const { match, updateTaskStateMutation, taskByIdQuery } = this.props
+        updateTaskStateMutation({ variables: { taskId: match.params.taskId, state } })
+            .then(() => taskByIdQuery.refetch())
+    }
 
     render () {
         const { login, taskByIdQuery, membersByProjectId } = this.props
@@ -61,6 +66,8 @@ class TaskDashboardScreen extends Component {
                         <Chip key={ assignee.id } label={assignee.name } />
                     )) }
                     <Button color='primary' onClick={ () => this.setState({ userDialogOpen: true }) }>Add</Button>
+                    <br /><br />
+                    <Button color='accent' raised onClick={ () => this.updateTaskState(task.state === 'done' ? 'new' : 'done') }>{ task.state === 'done' ? 'Undone' : 'Done!' }</Button>
                     <SelectUserDialog 
                         users={ projectMembers } 
                         selection={ task.assignees.map(a => a.id) }
@@ -129,10 +136,19 @@ mutation addAssigneesToTaskMutation($taskId: ID!, $assigneesIds: [ID!]) {
 }
 `
 
+const UPDATE_TASK_STATE_MUTATION = gql`
+mutation updateTaskStateMutation($taskId: ID!, $state: String!) {
+    updateTask(id: $taskId, state: $state) {
+        id
+    }
+}
+`
+
 const mapStateToProps = ({ login }) => ({ login })
 
 export default connect(mapStateToProps)(compose(
     graphql(TASK_BY_ID_QUERY, { name: 'taskByIdQuery', options: ({ match }) => ({ variables: { taskId: match.params.taskId } }) }),
     graphql(MEMBERS_BY_PROJECT_ID, { name: 'membersByProjectId', options: ({ taskByIdQuery }) => ({ variables: { projectId: taskByIdQuery.Task === undefined ? '' : taskByIdQuery.Task.project.id } }) }),
-    graphql(ADD_ASSIGNEES_TO_TASK_MUTATION, { name: 'addAssigneesToTaskMutation' }))
+    graphql(ADD_ASSIGNEES_TO_TASK_MUTATION, { name: 'addAssigneesToTaskMutation' }),
+    graphql(UPDATE_TASK_STATE_MUTATION, { name: 'updateTaskStateMutation' }))
     (TaskDashboardScreen))

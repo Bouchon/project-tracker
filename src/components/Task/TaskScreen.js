@@ -46,7 +46,7 @@ class TaskScreen extends Component {
         return (
             <div>
                 <Header selected='Tasks'>
-                    <Tabs value={ selectedTab } onChange={ (evt, val) => this.setState({ selectedTab: val }) }>
+                    <Tabs value={ selectedTab } onChange={ (evt, val) => this.setState({ selectedTab: val }) } style={{ margin: '-8px -16px' }}>
                         <Tab label='My tasks' />
                         <Tab label='All tasks' />
                     </Tabs>
