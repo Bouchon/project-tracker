@@ -27,7 +27,8 @@ const css = {
     headerTitle: { marginRight: 'auto' },
     container: {
         display: 'flex',
-        flexWrap: 'wrap',
+        flexDirection: 'column',
+        alignItems: 'center',
         padding: '15px 10vw'
     },
     leftPanel: {
@@ -43,13 +44,12 @@ const css = {
     },
     rightPanel: {
         width: 'calc(50% - 90px)',
+        margin: '15px',
         padding: '30px'
     },
     footer: {
-        width: '100%',
         padding: '15px',
         display: 'flex',
-        justifyContent: 'flex-end'
     }
 }
 
